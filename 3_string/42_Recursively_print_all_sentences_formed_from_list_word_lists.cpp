@@ -1,26 +1,27 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <string>
-
-using namespace std;
+#include <vector>
 
 class Solution {
 public:
-    void backtrack(const vector<vector<string>> &L, size_t row, vector<string> &current, vector<vector<string>> &res) {
+    void backtrack(const std::vector<std::vector<std::string>>& L, size_t row,
+                   std::vector<std::string>& current, std::vector<std::vector<std::string>>& res) {
         if (row == L.size()) {
             res.push_back(current);
             return;
         }
-        for (const string &word : L[row]) {
+        for (const std::string& word : L[row]) {
             current.push_back(word);
             backtrack(L, row + 1, current, res);
             current.pop_back();
         }
     }
 
-    vector<vector<string>> sentences(vector<vector<string>>& L) {
-        vector<vector<string>> res;
-        vector<string> current;
+    std::vector<std::vector<std::string>> sentences(const std::vector<std::vector<std::string>>& L) {
+        std::vector<std::vector<std::string>> res;
+        if (L.empty()) return res;
+        std::vector<std::string> current;
         backtrack(L, 0, current, res);
         return res;
     }
@@ -28,16 +29,22 @@ public:
 
 int main() {
     Solution sol;
-    vector<vector<string>> words = {
+    std::vector<std::vector<std::string>> words = {
         {"you", "we"},
         {"have", "are"},
         {"sleep", "eat"}
     };
     auto sentences = sol.sentences(words);
-    cout << "Generated sentences:\n";
-    for (const auto &s : sentences) {
-        for (const string &w : s) cout << w << " ";
-        cout << endl;
-    }
+    assert(sentences.size() == 8);
+
+    std::vector<std::string> first = {"you", "have", "sleep"};
+    std::vector<std::string> last = {"we", "are", "eat"};
+    assert(sentences.front() == first);
+    assert(sentences.back() == last);
+
+    std::vector<std::vector<std::string>> empty;
+    assert(sol.sentences(empty).empty());
+
+    std::cout << "42_Recursively_print_all_sentences_formed_from_list_word_lists tests passed.\n";
     return 0;
 }

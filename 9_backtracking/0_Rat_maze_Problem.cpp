@@ -1,7 +1,8 @@
-#include <iostream>
-#include <vector>
-#include <string>
 #include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <string>
+#include <vector>
 
 void dfs(int i, int j, std::string path, const std::vector<std::vector<int>>& mat, int n,
          std::vector<std::vector<bool>>& visited, std::vector<std::string>& ans) {
@@ -40,8 +41,15 @@ int main() {
     };
     int n = 4;
     auto paths = findPath(mat, n);
-    std::cout << "Rat in a maze paths: ";
-    for (const auto& p : paths) std::cout << p << " ";
-    std::cout << "\n";
+    std::vector<std::string> expected = {"DDRDRR", "DRDDRR"};
+    assert(paths == expected);
+
+    std::vector<std::vector<int>> blocked = {
+        {0, 0},
+        {0, 0}
+    };
+    assert(findPath(blocked, 2) == std::vector<std::string>{"-1"});
+
+    std::cout << "0_Rat_maze_Problem tests passed.\n";
     return 0;
 }

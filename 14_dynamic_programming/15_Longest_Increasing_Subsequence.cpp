@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -19,5 +20,7 @@ int longestSubsequence(int n, const std::vector<int>& a) {
 int main() {
     std::vector<int> a = {10, 22, 9, 33, 21, 50, 41, 60, 80};
     std::cout << "LIS length: " << longestSubsequence(a.size(), a) << " (expected 6)\n";
+    assert(longestSubsequence(a.size(), a) == 6);
+
     return 0;
 }

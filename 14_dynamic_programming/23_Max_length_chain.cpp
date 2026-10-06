@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -27,5 +28,7 @@ int maxChainLen(std::vector<Pair>& p, int n) {
 int main() {
     std::vector<Pair> p = {{5, 24}, {39, 60}, {15, 28}, {27, 40}, {50, 90}};
     std::cout << "Max length chain: " << maxChainLen(p, p.size()) << " (expected 3)\n";
+    assert(maxChainLen(p, p.size()) == 3);
+
     return 0;
 }

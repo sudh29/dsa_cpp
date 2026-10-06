@@ -1,17 +1,23 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
+
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
 
 class BST {
 public:
-    bool search(Node* root, int x) {
+    bool search(const Node* root, int x) const {
         if (!root) return false;
         if (root->data == x) return true;
         if (x < root->data) return search(root->left, x);
@@ -27,7 +33,16 @@ int main() {
     root->left->right = new Node(3);
 
     BST bst;
-    cout << "Search 3 in BST: " << (bst.search(root, 3) ? "Found" : "Not Found") << endl;
-    cout << "Search 5 in BST: " << (bst.search(root, 5) ? "Found" : "Not Found") << endl;
+    assert(bst.search(root, 3));
+    assert(bst.search(root, 1));
+    assert(bst.search(root, 7));
+    assert(bst.search(root, 4));
+    assert(!bst.search(root, 5));
+    assert(!bst.search(root, 0));
+    assert(!bst.search(root, 10));
+
+    freeTree(root);
+
+    std::cout << "7_bst 0_Find_value_BST: All tests passed.\n";
     return 0;
 }

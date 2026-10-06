@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -19,5 +20,8 @@ long long permutationCoeff(int n, int k) {
 int main() {
     std::cout << "P(10, 2): " << permutationCoeff(10, 2) << " (expected 90)\n";
     std::cout << "P(10, 3): " << permutationCoeff(10, 3) << " (expected 720)\n";
+    assert(permutationCoeff(10, 2) == 90);
+    assert(permutationCoeff(10, 3) == 720);
+
     return 0;
 }

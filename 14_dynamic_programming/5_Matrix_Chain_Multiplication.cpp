@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <climits>
@@ -24,5 +25,7 @@ int matrixMultiplication(int N, const std::vector<int>& arr) {
 int main() {
     std::vector<int> arr = {40, 20, 30, 10, 30};
     std::cout << "Min matrix mult operations: " << matrixMultiplication(arr.size(), arr) << " (expected 26000)\n";
+    assert(matrixMultiplication(arr.size(), arr) == 26000);
+
     return 0;
 }

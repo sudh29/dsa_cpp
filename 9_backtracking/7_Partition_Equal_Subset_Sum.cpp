@@ -1,6 +1,7 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <numeric>
+#include <vector>
 
 bool solve(const std::vector<int>& arr, size_t idx, int curr_sum, int target_sum) {
     if (curr_sum == target_sum) return true;
@@ -15,14 +16,19 @@ bool equalPartition(int N, const std::vector<int>& arr) {
     long long total_sum = 0;
     for (int x : arr) total_sum += x;
     if (total_sum % 2 != 0) return false;
-    return solve(arr, 0, 0, total_sum / 2);
+    return solve(arr, 0, 0, static_cast<int>(total_sum / 2));
 }
 
 int main() {
     std::vector<int> arr1 = {1, 5, 11, 5};
-    std::cout << "Equal partition {1, 5, 11, 5}: " << (equalPartition(arr1.size(), arr1) ? "YES" : "NO") << "\n";
+    assert(equalPartition(static_cast<int>(arr1.size()), arr1) == true);
 
     std::vector<int> arr2 = {1, 3, 5};
-    std::cout << "Equal partition {1, 3, 5}: " << (equalPartition(arr2.size(), arr2) ? "YES" : "NO") << "\n";
+    assert(equalPartition(static_cast<int>(arr2.size()), arr2) == false);
+
+    std::vector<int> arr3 = {2, 2};
+    assert(equalPartition(static_cast<int>(arr3.size()), arr3) == true);
+
+    std::cout << "7_Partition_Equal_Subset_Sum tests passed.\n";
     return 0;
 }

@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -25,5 +26,7 @@ int main() {
     std::string s1 = "ABCDGH";
     std::string s2 = "AEDFHR";
     std::cout << "LCS length: " << lcs(s1.length(), s2.length(), s1, s2) << " (expected 3)\n";
+    assert(lcs(s1.length(), s2.length(), s1, s2) == 3);
+
     return 0;
 }

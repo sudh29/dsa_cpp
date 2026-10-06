@@ -1,38 +1,49 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <queue>
-
-using namespace std;
+#include <vector>
 
 struct Node {
     int data;
     Node* next;
-    Node(int x) : data(x), next(nullptr) {}
+    explicit Node(int x) : data(x), next(nullptr) {}
 };
 
+void freeList(Node* head) {
+    while (head) {
+        Node* tmp = head;
+        head = head->next;
+        delete tmp;
+    }
+}
+
 struct CompareNode {
-    bool operator()(Node* a, Node* b) { return a->data > b->data; }
+    bool operator()(const Node* a, const Node* b) const {
+        return a->data > b->data;
+    }
 };
 
 class Solution {
 public:
-    Node *mergeKLists(Node *arr[], int K) {
-        priority_queue<Node*, vector<Node*>, CompareNode> pq;
-        for (int i = 0; i < K; i++) {
-            if (arr[i]) pq.push(arr[i]);
+    Node* mergeKLists(const std::vector<Node*> &arr) {
+        std::priority_queue<Node*, std::vector<Node*>, CompareNode> pq;
+        for (Node* node : arr) {
+            if (node) pq.push(node);
         }
 
-        Node* dummy = new Node(0);
-        Node* tail = dummy;
+        Node dummy(0);
+        Node* tail = &dummy;
 
         while (!pq.empty()) {
             Node* top = pq.top();
             pq.pop();
             tail->next = top;
             tail = tail->next;
-            if (top->next) pq.push(top->next);
+            if (top->next) {
+                pq.push(top->next);
+            }
         }
-        return dummy->next;
+        return dummy.next;
     }
 };
 
@@ -41,11 +52,24 @@ int main() {
     Node* l2 = new Node(2); l2->next = new Node(5);
     Node* l3 = new Node(3); l3->next = new Node(6);
 
-    Node* arr[] = {l1, l2, l3};
+    std::vector<Node*> arr = {l1, l2, l3};
     Solution sol;
-    Node* merged = sol.mergeKLists(arr, 3);
-    cout << "Merged K sorted LL: ";
-    while (merged) { cout << merged->data << " "; merged = merged->next; }
-    cout << endl;
+    Node* merged = sol.mergeKLists(arr);
+
+    std::vector<int> vals;
+    for (Node* curr = merged; curr != nullptr; curr = curr->next) {
+        vals.push_back(curr->data);
+    }
+    std::vector<int> expected = {1, 2, 3, 4, 5, 6};
+    assert(vals == expected);
+
+    freeList(merged);
+
+    // Test with empty lists
+    std::vector<Node*> emptyArr = {nullptr, nullptr};
+    Node* emptyMerged = sol.mergeKLists(emptyArr);
+    assert(emptyMerged == nullptr);
+
+    std::cout << "11_heap 9_Merge_K_sorted_linked_lists: All tests passed.\n";
     return 0;
 }

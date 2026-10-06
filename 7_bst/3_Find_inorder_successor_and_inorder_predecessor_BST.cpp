@@ -1,12 +1,19 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
 
 struct Node {
     int key;
-    Node *left, *right;
-    Node(int x) : key(x), left(nullptr), right(nullptr) {}
+    Node* left;
+    Node* right;
+    explicit Node(int x) : key(x), left(nullptr), right(nullptr) {}
 };
+
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
 
 class Solution {
 public:
@@ -44,9 +51,21 @@ int main() {
     root->left->left = new Node(20);
     root->left->right = new Node(40);
 
-    Node *pre = nullptr, *suc = nullptr;
+    Node *pre = nullptr;
+    Node *suc = nullptr;
     Solution sol;
     sol.findPreSuc(root, pre, suc, 30);
-    cout << "For key 30 -> Predecessor: " << (pre ? pre->key : -1) << ", Successor: " << (suc ? suc->key : -1) << endl;
+    assert(pre != nullptr && pre->key == 20);
+    assert(suc != nullptr && suc->key == 40);
+
+    pre = nullptr;
+    suc = nullptr;
+    sol.findPreSuc(root, pre, suc, 50);
+    assert(pre != nullptr && pre->key == 40);
+    assert(suc != nullptr && suc->key == 70);
+
+    freeTree(root);
+
+    std::cout << "7_bst 3_Find_inorder_successor_and_inorder_predecessor_BST: All tests passed.\n";
     return 0;
 }

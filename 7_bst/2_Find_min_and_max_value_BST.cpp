@@ -1,35 +1,49 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
-int minValue(Node* root) {
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
+int minValue(const Node* root) {
     if (!root) return -1;
-    Node* cur = root;
+    const Node* cur = root;
     while (cur->left) cur = cur->left;
     return cur->data;
 }
 
-int maxValue(Node* root) {
+int maxValue(const Node* root) {
     if (!root) return -1;
-    Node* cur = root;
+    const Node* cur = root;
     while (cur->right) cur = cur->right;
     return cur->data;
 }
 
 int main() {
+    assert(minValue(nullptr) == -1);
+    assert(maxValue(nullptr) == -1);
+
     Node* root = new Node(5);
     root->left = new Node(3);
     root->right = new Node(8);
     root->left->left = new Node(1);
     root->right->right = new Node(12);
 
-    cout << "Min value: " << minValue(root) << " | Max value: " << maxValue(root) << endl;
+    assert(minValue(root) == 1);
+    assert(maxValue(root) == 12);
+
+    freeTree(root);
+
+    std::cout << "7_bst 2_Find_min_and_max_value_BST: All tests passed.\n";
     return 0;
 }

@@ -1,6 +1,7 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 
 void findPaths(int r, int c, int m, int n, std::string path, std::vector<std::string>& all_paths) {
     if (r == m - 1 && c == n - 1) {
@@ -29,10 +30,12 @@ int main() {
     int m = 3, n = 3;
     std::vector<std::string> paths;
     findPaths(0, 0, m, n, "", paths);
-    std::cout << "Number of paths for " << m << "x" << n << ": " << numberOfPaths(m, n) << "\n";
-    std::cout << "All paths:\n";
-    for (const auto& p : paths) {
-        std::cout << "  " << p << "\n";
-    }
+    assert(numberOfPaths(m, n) == 6);
+    assert(paths.size() == 6);
+
+    assert(numberOfPaths(1, 1) == 1);
+    assert(numberOfPaths(2, 2) == 2);
+
+    std::cout << "16_Print_all_possible_paths_from_top_left_bottom_right_mXn_matrix tests passed.\n";
     return 0;
 }

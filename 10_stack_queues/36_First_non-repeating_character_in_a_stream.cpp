@@ -1,22 +1,23 @@
+#include <array>
+#include <cassert>
 #include <iostream>
-#include <string>
-#include <vector>
 #include <queue>
-
-using namespace std;
+#include <string>
+#include <string_view>
 
 class Solution {
 public:
-    string FirstNonRepeating(string A) {
-        vector<int> freq(26, 0);
-        queue<char> q;
-        string ans = "";
+    std::string FirstNonRepeating(std::string_view A) {
+        std::array<int, 26> freq{};
+        std::queue<char> q;
+        std::string ans;
+        ans.reserve(A.size());
 
         for (char c : A) {
-            freq[c - 'a']++;
+            freq[static_cast<size_t>(c - 'a')]++;
             q.push(c);
 
-            while (!q.empty() && freq[q.front() - 'a'] > 1) {
+            while (!q.empty() && freq[static_cast<size_t>(q.front() - 'a')] > 1) {
                 q.pop();
             }
 
@@ -32,7 +33,10 @@ public:
 
 int main() {
     Solution sol;
-    string stream = "aabc";
-    cout << "Stream: " << stream << " -> First non-repeating stream: " << sol.FirstNonRepeating(stream) << endl;
+    assert(sol.FirstNonRepeating("aabc") == "a#bb");
+    assert(sol.FirstNonRepeating("zz") == "z#");
+    assert(sol.FirstNonRepeating("abcde") == "aaaaa");
+
+    std::cout << "10_stack_queues 36_First_non-repeating_character_in_a_stream: All tests passed.\n";
     return 0;
 }

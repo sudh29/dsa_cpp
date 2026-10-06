@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -21,5 +22,7 @@ int main() {
     std::vector<int> a = {1, 2, 3, 4};
     int k = 10;
     std::cout << "Subarrays with product < 10: " << countSubArrayProductLessThanK(a, a.size(), k) << " (expected 7)\n";
+    assert(countSubArrayProductLessThanK(a, a.size(), k) == 7);
+
     return 0;
 }

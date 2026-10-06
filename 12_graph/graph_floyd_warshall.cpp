@@ -1,6 +1,7 @@
+#include <cassert>
+#include <iomanip>
 #include <iostream>
 #include <vector>
-#include <iomanip>
 
 const long long INF = 1e9;
 
@@ -26,25 +27,17 @@ int main() {
     dist[1][2] = 3;
     dist[2][3] = 1;
 
-    std::cout << "Original distance matrix:\n";
-    for (int i = 0; i < V; ++i) {
-        for (int j = 0; j < V; ++j) {
-            if (dist[i][j] == INF) std::cout << "INF ";
-            else std::cout << std::setw(3) << dist[i][j] << " ";
-        }
-        std::cout << "\n";
-    }
-
     floydWarshall(dist, V);
 
-    std::cout << "\nAll-pairs shortest distances (Floyd-Warshall):\n";
-    for (int i = 0; i < V; ++i) {
-        for (int j = 0; j < V; ++j) {
-            if (dist[i][j] == INF) std::cout << "INF ";
-            else std::cout << std::setw(3) << dist[i][j] << " ";
-        }
-        std::cout << "\n";
-    }
+    assert(dist[0][0] == 0);
+    assert(dist[0][1] == 5);
+    assert(dist[0][2] == 8);
+    assert(dist[0][3] == 9);
+    assert(dist[1][2] == 3);
+    assert(dist[1][3] == 4);
+    assert(dist[2][3] == 1);
+    assert(dist[3][0] == INF);
 
+    std::cout << "graph_floyd_warshall tests passed.\n";
     return 0;
 }

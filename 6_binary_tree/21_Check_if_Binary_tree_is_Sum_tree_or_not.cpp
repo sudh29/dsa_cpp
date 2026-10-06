@@ -1,17 +1,23 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 class Solution {
-public:
-    int checkSumTree(Node* root) {
+private:
+    int checkSumTree(const Node* root) const {
         if (!root) return 0;
         if (!root->left && !root->right) return root->data;
 
@@ -20,11 +26,14 @@ public:
         int rs = checkSumTree(root->right);
         if (rs == -1) return -1;
 
-        if (root->data == ls + rs) return 2 * root->data;
+        if (root->data == ls + rs) {
+            return 2 * root->data;
+        }
         return -1;
     }
 
-    bool isSumTree(Node* root) {
+public:
+    bool isSumTree(const Node* root) const {
         return checkSumTree(root) != -1;
     }
 };
@@ -38,6 +47,14 @@ int main() {
     root->right->right = new Node(3);
 
     Solution sol;
-    cout << "Is sum tree: " << (sol.isSumTree(root) ? "Yes" : "No") << endl;
+    assert(sol.isSumTree(root));
+
+    // Violate sum tree property
+    root->data = 30;
+    assert(!sol.isSumTree(root));
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 21_Check_if_Binary_tree_is_Sum_tree_or_not: All tests passed.\n";
     return 0;
 }

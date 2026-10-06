@@ -1,9 +1,10 @@
+#include <cassert>
 #include <iostream>
-#include <string>
-#include <vector>
 #include <queue>
-
-using namespace std;
+#include <span>
+#include <string>
+#include <string_view>
+#include <vector>
 
 struct MinHeapNode {
     char data;
@@ -18,7 +19,14 @@ struct compare {
     }
 };
 
-void printCodes(MinHeapNode* root, string str, vector<string> &res) {
+void freeTree(MinHeapNode* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
+void printCodes(MinHeapNode* root, std::string str, std::vector<std::string>& res) {
     if (!root) return;
     if (!root->left && !root->right) res.push_back(str);
     printCodes(root->left, str + "0", res);
@@ -27,9 +35,13 @@ void printCodes(MinHeapNode* root, string str, vector<string> &res) {
 
 class Solution {
 public:
-    vector<string> huffmanCodes(string S, vector<int> f, int N) {
-        priority_queue<MinHeapNode*, vector<MinHeapNode*>, compare> minH;
-        for (int i = 0; i < N; i++) minH.push(new MinHeapNode(S[i], f[i]));
+    std::vector<std::string> huffmanCodes(std::string_view S, std::span<const int> f) {
+        size_t N = S.length();
+        if (N == 0) return {};
+        std::priority_queue<MinHeapNode*, std::vector<MinHeapNode*>, compare> minH;
+        for (size_t i = 0; i < N; i++) {
+            minH.push(new MinHeapNode(S[i], f[i]));
+        }
 
         while (minH.size() > 1) {
             MinHeapNode* left = minH.top(); minH.pop();
@@ -40,19 +52,32 @@ public:
             minH.push(top);
         }
 
-        vector<string> res;
-        printCodes(minH.top(), "", res);
+        std::vector<std::string> res;
+        MinHeapNode* root = minH.top();
+        printCodes(root, "", res);
+        freeTree(root);
         return res;
     }
 };
 
 int main() {
     Solution sol;
-    string s = "abcdef";
-    vector<int> f = {5, 9, 12, 13, 16, 45};
-    auto codes = sol.huffmanCodes(s, f, 6);
-    cout << "Huffman codes: ";
-    for (const string &c : codes) cout << c << " ";
-    cout << endl;
+    std::string_view s = "abcdef";
+    std::vector<int> f = {5, 9, 12, 13, 16, 45};
+    auto codes = sol.huffmanCodes(s, f);
+    assert(codes.size() == 6);
+    for (const auto& c : codes) {
+        assert(!c.empty());
+    }
+    // Verify prefix-free code property
+    for (size_t i = 0; i < codes.size(); i++) {
+        for (size_t j = 0; j < codes.size(); j++) {
+            if (i != j) {
+                assert(codes[i].find(codes[j]) != 0);
+            }
+        }
+    }
+
+    std::cout << "2_Huffman_Coding tests passed.\n";
     return 0;
 }

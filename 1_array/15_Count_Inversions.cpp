@@ -1,33 +1,38 @@
+#include <cassert>
+#include <cstdint>
 #include <iostream>
+#include <span>
 #include <vector>
 
-using namespace std;
-
 class Solution {
-public:
-    long long merge(long long arr[], long long l, long long m, long long r) {
-        long long ci = 0;
-        long long i = l, j = m + 1, k = 0;
-        vector<long long> temp(r - l + 1);
+private:
+    int64_t merge(std::span<int64_t> arr, size_t l, size_t m, size_t r) {
+        int64_t ci = 0;
+        size_t i = l;
+        size_t j = m + 1;
+        std::vector<int64_t> temp;
+        temp.reserve(r - l + 1);
 
         while (i <= m && j <= r) {
             if (arr[i] <= arr[j]) {
-                temp[k++] = arr[i++];
+                temp.push_back(arr[i++]);
             } else {
-                temp[k++] = arr[j++];
-                ci += (m - i + 1);
+                temp.push_back(arr[j++]);
+                ci += static_cast<int64_t>(m - i + 1);
             }
         }
-        while (i <= m) temp[k++] = arr[i++];
-        while (j <= r) temp[k++] = arr[j++];
-        for (int p = 0; p < k; p++) arr[l + p] = temp[p];
+        while (i <= m) temp.push_back(arr[i++]);
+        while (j <= r) temp.push_back(arr[j++]);
+        for (size_t p = 0; p < temp.size(); ++p) {
+            arr[l + p] = temp[p];
+        }
         return ci;
     }
 
-    long long mergesort(long long arr[], long long low, long long high) {
-        long long ci = 0;
+    int64_t mergesort(std::span<int64_t> arr, size_t low, size_t high) {
+        int64_t ci = 0;
         if (low < high) {
-            long long mid = low + (high - low) / 2;
+            size_t mid = low + (high - low) / 2;
             ci += mergesort(arr, low, mid);
             ci += mergesort(arr, mid + 1, high);
             ci += merge(arr, low, mid, high);
@@ -35,15 +40,24 @@ public:
         return ci;
     }
 
-    long long int inversionCount(long long arr[], long long N) {
-        return mergesort(arr, 0, N - 1);
+public:
+    int64_t inversionCount(std::span<int64_t> arr) {
+        if (arr.size() <= 1) return 0;
+        return mergesort(arr, 0, arr.size() - 1);
     }
 };
 
 int main() {
     Solution sol;
-    long long arr[] = {2, 4, 1, 3, 5};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    cout << "Inversion count: " << sol.inversionCount(arr, n) << endl;
+    std::vector<int64_t> arr1 = {2, 4, 1, 3, 5};
+    assert(sol.inversionCount(arr1) == 3);
+
+    std::vector<int64_t> arr2 = {5, 4, 3, 2, 1};
+    assert(sol.inversionCount(arr2) == 10);
+
+    std::vector<int64_t> arr3 = {1, 2, 3, 4, 5};
+    assert(sol.inversionCount(arr3) == 0);
+
+    std::cout << "1_array 15_Count_Inversions: All tests passed.\n";
     return 0;
 }

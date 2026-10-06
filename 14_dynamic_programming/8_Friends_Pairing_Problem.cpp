@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -20,5 +21,8 @@ long long countFriendsPairings(int n) {
 int main() {
     std::cout << "Friends pairing for 3: " << countFriendsPairings(3) << " (expected 4)\n";
     std::cout << "Friends pairing for 4: " << countFriendsPairings(4) << " (expected 10)\n";
+    assert(countFriendsPairings(3) == 4);
+    assert(countFriendsPairings(4) == 10);
+
     return 0;
 }

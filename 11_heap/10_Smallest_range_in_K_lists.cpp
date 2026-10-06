@@ -1,44 +1,56 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <climits>
 #include <algorithm>
-
-using namespace std;
+#include <cassert>
+#include <climits>
+#include <iostream>
+#include <queue>
+#include <utility>
+#include <vector>
 
 class Solution {
 public:
     struct Node {
-        int val, row, col;
-        bool operator>(const Node &other) const { return val > other.val; }
+        int val;
+        size_t row;
+        size_t col;
+
+        bool operator>(const Node &other) const {
+            return val > other.val;
+        }
     };
 
-    pair<int, int> findSmallestRange(vector<vector<int>> &KSortedArray, int n, int k) {
-        priority_queue<Node, vector<Node>, greater<Node>> pq;
-        int max_val = INT_MIN;
-
-        for (int i = 0; i < k; i++) {
-            pq.push({KSortedArray[i][0], i, 0});
-            max_val = max(max_val, KSortedArray[i][0]);
+    std::pair<int, int> findSmallestRange(const std::vector<std::vector<int>> &kSortedArray) {
+        if (kSortedArray.empty()) return {-1, -1};
+        for (const auto &row : kSortedArray) {
+            if (row.empty()) return {-1, -1};
         }
 
-        int start = -1, end = -1, min_range = INT_MAX;
+        std::priority_queue<Node, std::vector<Node>, std::greater<Node>> pq;
+        int maxVal = INT_MIN;
+
+        for (size_t i = 0; i < kSortedArray.size(); ++i) {
+            pq.push({kSortedArray[i][0], i, 0});
+            maxVal = std::max(maxVal, kSortedArray[i][0]);
+        }
+
+        int start = -1;
+        int end = -1;
+        int minRange = INT_MAX;
 
         while (true) {
             auto top = pq.top();
             pq.pop();
-            int min_val = top.val;
+            int minVal = top.val;
 
-            if (max_val - min_val < min_range) {
-                min_range = max_val - min_val;
-                start = min_val;
-                end = max_val;
+            if (maxVal - minVal < minRange) {
+                minRange = maxVal - minVal;
+                start = minVal;
+                end = maxVal;
             }
 
-            if (top.col + 1 < n) {
-                int next_val = KSortedArray[top.row][top.col + 1];
-                pq.push({next_val, top.row, top.col + 1});
-                max_val = max(max_val, next_val);
+            if (top.col + 1 < kSortedArray[top.row].size()) {
+                int nextVal = kSortedArray[top.row][top.col + 1];
+                pq.push({nextVal, top.row, top.col + 1});
+                maxVal = std::max(maxVal, nextVal);
             } else {
                 break;
             }
@@ -49,12 +61,14 @@ public:
 
 int main() {
     Solution sol;
-    vector<vector<int>> arr = {
+    std::vector<std::vector<int>> arr = {
         {1, 3, 5, 7, 9},
         {0, 2, 4, 6, 8},
         {2, 3, 5, 7, 11}
     };
-    auto range = sol.findSmallestRange(arr, 5, 3);
-    cout << "Smallest range covering all K lists: [" << range.first << ", " << range.second << "]" << endl;
+    auto range = sol.findSmallestRange(arr);
+    assert(range.first == 1 && range.second == 2);
+
+    std::cout << "11_heap 10_Smallest_range_in_K_lists: All tests passed.\n";
     return 0;
 }

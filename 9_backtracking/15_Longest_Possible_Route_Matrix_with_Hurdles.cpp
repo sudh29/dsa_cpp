@@ -1,6 +1,7 @@
+#include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 void solve(const std::vector<std::vector<int>>& mat, int n, int m, int r, int c,
            int dr, int dc, std::vector<std::vector<bool>>& visited, int curr, int& max_len) {
@@ -39,6 +40,9 @@ int main() {
     };
 
     int n = 3, m = 10;
-    std::cout << "Longest path length: " << longestPath(mat, n, m, 0, 0, 1, 7) << " (expected 24)\n";
+    assert(longestPath(mat, n, m, 0, 0, 1, 7) == 24);
+    assert(longestPath(mat, n, m, 0, 0, 0, 0) == 0);
+
+    std::cout << "15_Longest_Possible_Route_Matrix_with_Hurdles tests passed.\n";
     return 0;
 }

@@ -1,20 +1,28 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
+#include <vector>
 
 struct TreeNode {
     int val;
     TreeNode* left;
     TreeNode* right;
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    explicit TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
+
+void freeTree(TreeNode* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
 
 class Solution {
 public:
     TreeNode* minValueNode(TreeNode* node) {
         TreeNode* current = node;
-        while (current && current->left != nullptr)
+        while (current && current->left != nullptr) {
             current = current->left;
+        }
         return current;
     }
 
@@ -43,11 +51,11 @@ public:
     }
 };
 
-void inorder(TreeNode* root) {
+void getInorder(const TreeNode* root, std::vector<int> &res) {
     if (!root) return;
-    inorder(root->left);
-    cout << root->val << " ";
-    inorder(root->right);
+    getInorder(root->left, res);
+    res.push_back(root->val);
+    getInorder(root->right, res);
 }
 
 int main() {
@@ -59,8 +67,21 @@ int main() {
 
     Solution sol;
     root = sol.deleteNode(root, 3);
-    cout << "BST after deleting 3: ";
-    inorder(root);
-    cout << endl;
+
+    std::vector<int> vals;
+    getInorder(root, vals);
+    std::vector<int> expected = {2, 4, 5, 6};
+    assert(vals == expected);
+
+    // Delete root node 5
+    root = sol.deleteNode(root, 5);
+    vals.clear();
+    getInorder(root, vals);
+    expected = {2, 4, 6};
+    assert(vals == expected);
+
+    freeTree(root);
+
+    std::cout << "7_bst 1_Deletion_node_BST: All tests passed.\n";
     return 0;
 }

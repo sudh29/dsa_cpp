@@ -1,30 +1,35 @@
+#include <cassert>
 #include <iostream>
+#include <span>
 #include <vector>
 
-using namespace std;
-
-void mergeArrays(int arr1[], int arr2[], int n1, int n2, int arr3[]) {
-    int i = 0, j = 0, k = 0;
-    while (i < n1 && j < n2) {
-        if (arr1[i] < arr2[j])
-            arr3[k++] = arr1[i++];
-        else
-            arr3[k++] = arr2[j++];
+std::vector<int> mergeArrays(std::span<const int> arr1, std::span<const int> arr2) {
+    std::vector<int> res;
+    res.reserve(arr1.size() + arr2.size());
+    size_t i = 0, j = 0;
+    while (i < arr1.size() && j < arr2.size()) {
+        if (arr1[i] < arr2[j]) {
+            res.push_back(arr1[i++]);
+        } else {
+            res.push_back(arr2[j++]);
+        }
     }
-    while (i < n1) arr3[k++] = arr1[i++];
-    while (j < n2) arr3[k++] = arr2[j++];
+    while (i < arr1.size()) res.push_back(arr1[i++]);
+    while (j < arr2.size()) res.push_back(arr2[j++]);
+    return res;
 }
 
 int main() {
-    int arr1[] = {1, 3, 5, 7};
-    int arr2[] = {2, 4, 6, 8};
-    int n1 = sizeof(arr1) / sizeof(arr1[0]);
-    int n2 = sizeof(arr2) / sizeof(arr2[0]);
-    int arr3[n1 + n2];
+    std::vector<int> arr1 = {1, 3, 5, 7};
+    std::vector<int> arr2 = {2, 4, 6, 8};
+    auto merged = mergeArrays(arr1, arr2);
+    std::vector<int> expected = {1, 2, 3, 4, 5, 6, 7, 8};
+    assert(merged == expected);
 
-    mergeArrays(arr1, arr2, n1, n2, arr3);
-    cout << "Merged array: ";
-    for (int i = 0; i < n1 + n2; i++) cout << arr3[i] << " ";
-    cout << endl;
+    assert(mergeArrays({}, arr2) == arr2);
+    assert(mergeArrays(arr1, {}) == arr1);
+    assert(mergeArrays({}, {}).empty());
+
+    std::cout << "13_merge_two_sorted_arrays tests passed.\n";
     return 0;
 }

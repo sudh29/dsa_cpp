@@ -1,31 +1,40 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <string>
 #include <unordered_map>
-
-using namespace std;
+#include <vector>
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
-class Solution {
-public:
-    unordered_map<string, int> subtrees;
-    vector<Node*> duplicates;
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
 
-    string serialize(Node* root) {
+class Solution {
+private:
+    std::unordered_map<std::string, int> subtrees;
+    std::vector<Node*> duplicates;
+
+    std::string serialize(Node* root) {
         if (!root) return "#";
-        string s = to_string(root->data) + "," + serialize(root->left) + "," + serialize(root->right);
+        std::string s = std::to_string(root->data) + "," + serialize(root->left) + "," + serialize(root->right);
         subtrees[s]++;
-        if (subtrees[s] == 2) duplicates.push_back(root);
+        if (subtrees[s] == 2) {
+            duplicates.push_back(root);
+        }
         return s;
     }
 
-    vector<Node*> printAllDups(Node* root) {
+public:
+    std::vector<Node*> printAllDups(Node* root) {
         subtrees.clear();
         duplicates.clear();
         serialize(root);
@@ -44,6 +53,11 @@ int main() {
 
     Solution sol;
     auto dups = sol.printAllDups(root);
-    cout << "Duplicate subtrees count: " << dups.size() << endl;
+    // Duplicate subtrees: subtree '4' and subtree '2 -> 4'
+    assert(dups.size() == 2);
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 33_Find_all_Duplicate_subtrees_Binary_tree: All tests passed.\n";
     return 0;
 }

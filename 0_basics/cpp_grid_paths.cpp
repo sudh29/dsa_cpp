@@ -1,11 +1,19 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
-// Count unique paths from top-left to bottom-right in an m x n grid
+/**
+ * Problem: Unique Grid Paths (Dynamic Programming)
+ * Module: 0_basics
+ * Time Complexity: O(m * n)
+ * Space Complexity: O(n)
+ */
+
 int unique_paths(int m, int n) {
+    if (m <= 0 || n <= 0) return 0;
     std::vector<int> dp(n, 1);
-    for (int i = 1; i < m; i++) {
-        for (int j = 1; j < n; j++) {
+    for (int i = 1; i < m; ++i) {
+        for (int j = 1; j < n; ++j) {
             dp[j] += dp[j - 1];
         }
     }
@@ -13,8 +21,13 @@ int unique_paths(int m, int n) {
 }
 
 int main() {
-    std::cout << "=== Unique Grid Paths (Dynamic Programming) ===" << std::endl;
-    int m = 3, n = 7;
-    std::cout << "Grid " << m << "x" << n << " unique paths: " << unique_paths(m, n) << std::endl;
+    assert(unique_paths(3, 7) == 28);
+    assert(unique_paths(3, 2) == 3);
+    assert(unique_paths(1, 1) == 1);
+    assert(unique_paths(1, 10) == 1);
+    assert(unique_paths(10, 1) == 1);
+    assert(unique_paths(0, 5) == 0);
+
+    std::cout << "[PASS] 0_basics/cpp_grid_paths: all tests passed!\n";
     return 0;
 }

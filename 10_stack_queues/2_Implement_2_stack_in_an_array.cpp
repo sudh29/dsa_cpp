@@ -1,59 +1,73 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
 class TwoStacks {
 private:
-    int *arr;
-    int size;
-    int top1, top2;
+    int capacity;
+    int top1;
+    int top2;
+    std::vector<int> arr;
 
 public:
-    TwoStacks(int n) : size(n), top1(-1), top2(n) {
-        arr = new int[n];
-    }
+    explicit TwoStacks(int n) : capacity(n), top1(-1), top2(n), arr(n) {}
 
-    ~TwoStacks() {
-        delete[] arr;
-    }
-
-    void push1(int x) {
+    bool push1(int x) {
         if (top1 < top2 - 1) {
             arr[++top1] = x;
-        } else {
-            cout << "Stack Overflow in Stack 1\n";
+            return true;
         }
+        return false;
     }
 
-    void push2(int x) {
+    bool push2(int x) {
         if (top1 < top2 - 1) {
             arr[--top2] = x;
-        } else {
-            cout << "Stack Overflow in Stack 2\n";
+            return true;
         }
+        return false;
     }
 
     int pop1() {
-        if (top1 >= 0) return arr[top1--];
+        if (top1 >= 0) {
+            return arr[top1--];
+        }
         return -1;
     }
 
     int pop2() {
-        if (top2 < size) return arr[top2++];
+        if (top2 < capacity) {
+            return arr[top2++];
+        }
         return -1;
     }
+
+    [[nodiscard]] bool empty1() const { return top1 < 0; }
+    [[nodiscard]] bool empty2() const { return top2 >= capacity; }
 };
 
 int main() {
-    TwoStacks ts(10);
-    ts.push1(5);
-    ts.push2(10);
-    ts.push2(15);
-    ts.push1(11);
-    ts.push2(7);
+    TwoStacks ts(5);
+    assert(ts.empty1());
+    assert(ts.empty2());
 
-    cout << "Popped from stack 1: " << ts.pop1() << endl;
-    cout << "Popped from stack 2: " << ts.pop2() << endl;
+    assert(ts.push1(5));
+    assert(ts.push2(10));
+    assert(ts.push2(15));
+    assert(ts.push1(11));
+    assert(ts.push2(7));
+    // Now total elements = 5 (capacity full)
+    assert(!ts.push1(99));
+    assert(!ts.push2(99));
+
+    assert(ts.pop1() == 11);
+    assert(ts.pop2() == 7);
+    assert(ts.pop2() == 15);
+    assert(ts.pop2() == 10);
+    assert(ts.pop2() == -1); // empty
+    assert(ts.pop1() == 5);
+    assert(ts.pop1() == -1); // empty
+
+    std::cout << "10_stack_queues 2_Implement_2_stack_in_an_array: All tests passed.\n";
     return 0;
 }

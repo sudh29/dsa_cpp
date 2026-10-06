@@ -1,6 +1,8 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <queue>
+#include <utility>
+#include <vector>
 
 struct Cell {
     int x, y, dist;
@@ -42,7 +44,9 @@ int main() {
     std::pair<int, int> knight = {4, 5};
     std::pair<int, int> target = {1, 1};
 
-    std::cout << "Minimum steps by Knight on " << N << "x" << N << ": "
-              << minStepToReachTarget(knight, target, N) << " (expected 3)\n";
+    assert(minStepToReachTarget(knight, target, N) == 3);
+    assert(minStepToReachTarget({1, 1}, {1, 1}, N) == 0);
+
+    std::cout << "7_Minimum_Step_by_Knight tests passed.\n";
     return 0;
 }

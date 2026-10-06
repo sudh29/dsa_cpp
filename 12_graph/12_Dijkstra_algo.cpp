@@ -1,7 +1,9 @@
-#include <iostream>
-#include <vector>
-#include <queue>
+#include <cassert>
 #include <climits>
+#include <iostream>
+#include <queue>
+#include <utility>
+#include <vector>
 
 std::vector<int> dijkstra(int V, const std::vector<std::vector<std::pair<int, int>>>& adj, int S) {
     std::vector<int> dist(V, INT_MAX);
@@ -38,8 +40,13 @@ int main() {
     adj[2].push_back({0, 6});
 
     auto distances = dijkstra(V, adj, 2);
-    std::cout << "Distances from source 2: ";
-    for (int d : distances) std::cout << d << " ";
-    std::cout << "\n";
+    std::vector<int> expected = {4, 3, 0};
+    assert(distances == expected);
+
+    auto d0 = dijkstra(V, adj, 0);
+    std::vector<int> expected0 = {0, 1, 4};
+    assert(d0 == expected0);
+
+    std::cout << "12_Dijkstra_algo tests passed.\n";
     return 0;
 }

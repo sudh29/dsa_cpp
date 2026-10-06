@@ -1,11 +1,12 @@
-#include <iostream>
-#include <vector>
 #include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <span>
+#include <vector>
 
-using namespace std;
-
-bool canPlace(const vector<int> &stalls, int cows, int minDist) {
-    int count = 1, last = stalls[0];
+bool canPlace(std::span<const int> stalls, int cows, int minDist) {
+    int count = 1;
+    int last = stalls[0];
     for (size_t i = 1; i < stalls.size(); i++) {
         if (stalls[i] - last >= minDist) {
             count++;
@@ -16,8 +17,9 @@ bool canPlace(const vector<int> &stalls, int cows, int minDist) {
     return false;
 }
 
-int largestMinDistance(vector<int> stalls, int cows) {
-    sort(stalls.begin(), stalls.end());
+int largestMinDistance(std::vector<int> stalls, int cows) {
+    if (stalls.empty() || cows <= 0) return 0;
+    std::sort(stalls.begin(), stalls.end());
     int low = 1, high = stalls.back() - stalls.front(), ans = 0;
     while (low <= high) {
         int mid = low + (high - low) / 2;
@@ -32,8 +34,15 @@ int largestMinDistance(vector<int> stalls, int cows) {
 }
 
 int main() {
-    vector<int> stalls = {1, 2, 8, 4, 9};
-    int cows = 3;
-    cout << "Largest minimum distance for " << cows << " cows: " << largestMinDistance(stalls, cows) << endl;
+    std::vector<int> stalls1 = {1, 2, 8, 4, 9};
+    assert(largestMinDistance(stalls1, 3) == 3);
+
+    std::vector<int> stalls2 = {1, 2, 3, 4, 5};
+    assert(largestMinDistance(stalls2, 2) == 4);
+
+    std::vector<int> stalls3 = {10, 1, 2, 7, 5};
+    assert(largestMinDistance(stalls3, 3) == 4);
+
+    std::cout << "23_Aggressive_cows tests passed.\n";
     return 0;
 }

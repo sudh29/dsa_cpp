@@ -1,23 +1,29 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 class Solution {
-public:
-    bool isLeaf(Node* root) {
+private:
+    bool isLeaf(const Node* root) const {
         return (!root->left && !root->right);
     }
 
-    void addLeftBoundary(Node* root, vector<int> &res) {
-        Node* cur = root->left;
+    void addLeftBoundary(const Node* root, std::vector<int> &res) const {
+        const Node* cur = root->left;
         while (cur) {
             if (!isLeaf(cur)) res.push_back(cur->data);
             if (cur->left) cur = cur->left;
@@ -25,7 +31,7 @@ public:
         }
     }
 
-    void addLeaves(Node* root, vector<int> &res) {
+    void addLeaves(const Node* root, std::vector<int> &res) const {
         if (isLeaf(root)) {
             res.push_back(root->data);
             return;
@@ -34,19 +40,22 @@ public:
         if (root->right) addLeaves(root->right, res);
     }
 
-    void addRightBoundary(Node* root, vector<int> &res) {
-        Node* cur = root->right;
-        vector<int> temp;
+    void addRightBoundary(const Node* root, std::vector<int> &res) const {
+        const Node* cur = root->right;
+        std::vector<int> temp;
         while (cur) {
             if (!isLeaf(cur)) temp.push_back(cur->data);
             if (cur->right) cur = cur->right;
             else cur = cur->left;
         }
-        for (int i = temp.size() - 1; i >= 0; i--) res.push_back(temp[i]);
+        for (size_t i = temp.size(); i > 0; --i) {
+            res.push_back(temp[i - 1]);
+        }
     }
 
-    vector<int> boundary(Node *root) {
-        vector<int> res;
+public:
+    std::vector<int> boundary(const Node *root) const {
+        std::vector<int> res;
         if (!root) return res;
         if (!isLeaf(root)) res.push_back(root->data);
         addLeftBoundary(root, res);
@@ -65,8 +74,14 @@ int main() {
 
     Solution sol;
     auto res = sol.boundary(root);
-    cout << "Boundary traversal: ";
-    for (int v : res) cout << v << " ";
-    cout << endl;
+    // Boundary: root(1), left boundary(2), leaves(4, 5), right boundary(3)
+    std::vector<int> expected = {1, 2, 4, 5, 3};
+    assert(res == expected);
+
+    assert(sol.boundary(nullptr).empty());
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 15_Boundary_traversal_tree: All tests passed.\n";
     return 0;
 }

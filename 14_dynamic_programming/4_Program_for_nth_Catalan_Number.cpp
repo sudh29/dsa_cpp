@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -17,5 +18,8 @@ long long findCatalan(int N) {
 int main() {
     std::cout << "Catalan(5): " << findCatalan(5) << " (expected 42)\n";
     std::cout << "Catalan(4): " << findCatalan(4) << " (expected 14)\n";
+    assert(findCatalan(5) == 42);
+    assert(findCatalan(4) == 14);
+
     return 0;
 }

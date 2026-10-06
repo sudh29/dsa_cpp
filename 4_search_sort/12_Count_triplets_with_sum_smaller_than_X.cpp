@@ -1,12 +1,13 @@
-#include <iostream>
 #include <algorithm>
-
-using namespace std;
+#include <cassert>
+#include <iostream>
+#include <vector>
 
 class Solution {
 public:
-    long long countTriplets(long long arr[], int n, long long sum) {
-        sort(arr, arr + n);
+    long long countTriplets(std::vector<long long> arr, long long sum) {
+        std::sort(arr.begin(), arr.end());
+        int n = static_cast<int>(arr.size());
         long long count = 0;
         for (int i = 0; i < n - 2; i++) {
             int j = i + 1, k = n - 1;
@@ -25,9 +26,12 @@ public:
 
 int main() {
     Solution sol;
-    long long arr[] = {-2, 0, 1, 3};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    long long sum = 2;
-    cout << "Triplets with sum < " << sum << ": " << sol.countTriplets(arr, n, sum) << endl;
+    std::vector<long long> arr1 = {-2, 0, 1, 3};
+    assert(sol.countTriplets(arr1, 2) == 2);
+
+    std::vector<long long> arr2 = {5, 1, 3, 4, 7};
+    assert(sol.countTriplets(arr2, 12) == 4);
+
+    std::cout << "12_Count_triplets_with_sum_smaller_than_X tests passed.\n";
     return 0;
 }

@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -21,5 +22,7 @@ int longestSubseq(int n, const std::vector<int>& a) {
 int main() {
     std::vector<int> a = {10, 9, 4, 5, 4, 8, 6};
     std::cout << "Longest subsequence diff 1: " << longestSubseq(a.size(), a) << " (expected 3)\n";
+    assert(longestSubseq(a.size(), a) == 3);
+
     return 0;
 }

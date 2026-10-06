@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -36,5 +37,8 @@ long long getCount(int n) {
 int main() {
     std::cout << "Keypad count n=1: " << getCount(1) << " (expected 10)\n";
     std::cout << "Keypad count n=2: " << getCount(2) << " (expected 36)\n";
+    assert(getCount(1) == 10);
+    assert(getCount(2) == 36);
+
     return 0;
 }

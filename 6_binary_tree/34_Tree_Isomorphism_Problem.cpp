@@ -1,17 +1,23 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
+
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
 
 class Solution {
 public:
-    bool isIsomorphic(Node *root1, Node *root2) {
+    bool isIsomorphic(const Node *root1, const Node *root2) const {
         if (!root1 && !root2) return true;
         if (!root1 || !root2) return false;
         if (root1->data != root2->data) return false;
@@ -27,6 +33,15 @@ int main() {
     Node* r2 = new Node(1); r2->left = new Node(3); r2->right = new Node(2);
 
     Solution sol;
-    cout << "Trees are isomorphic: " << (sol.isIsomorphic(r1, r2) ? "Yes" : "No") << endl;
+    assert(sol.isIsomorphic(r1, r2));
+
+    Node* r3 = new Node(1); r3->left = new Node(4); r3->right = new Node(5);
+    assert(!sol.isIsomorphic(r1, r3));
+
+    freeTree(r1);
+    freeTree(r2);
+    freeTree(r3);
+
+    std::cout << "6_binary_tree 34_Tree_Isomorphism_Problem: All tests passed.\n";
     return 0;
 }

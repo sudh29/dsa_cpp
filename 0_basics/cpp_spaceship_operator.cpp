@@ -1,20 +1,40 @@
-#include <iostream>
+#include <cassert>
 #include <compare>
+#include <iostream>
+
+/**
+ * Topic: C++20 Three-Way Comparison (Spaceship Operator <=>)
+ * Module: 0_basics
+ */
+
+struct Point {
+    int x;
+    int y;
+    auto operator<=>(const Point&) const = default;
+};
 
 int main() {
-    std::cout << "=== C++20 Three-Way Comparison (Spaceship Operator) ===" << std::endl;
-    int a = 10, b = 20;
-    auto cmp = (a <=> b);
+    // Primitive types
+    int a = 10;
+    int b = 20;
+    assert((a <=> b) < 0);
+    assert((b <=> a) > 0);
+    assert((a <=> a) == 0);
 
-    if (cmp < 0) {
-        std::cout << a << " is less than " << b << std::endl;
-    } else if (cmp == 0) {
-        std::cout << a << " is equal to " << b << std::endl;
-    } else {
-        std::cout << a << " is greater than " << b << std::endl;
-    }
+    // Custom struct with defaulted spaceship operator
+    Point p1{1, 2};
+    Point p2{1, 3};
+    Point p3{1, 2};
 
-    bool result = (a <=> b) > 0;
-    std::cout << "Result of ((10 <=> 20) > 0): " << std::boolalpha << result << std::endl;
+    assert(p1 < p2);
+    assert(p1 == p3);
+    assert(p2 > p1);
+    assert((p1 <=> p2) < 0);
+
+    // Compile-time verification
+    static_assert((Point{2, 3} <=> Point{2, 3}) == 0);
+    static_assert((Point{1, 5} <=> Point{2, 0}) < 0);
+
+    std::cout << "[PASS] 0_basics/cpp_spaceship_operator: all tests passed!\n";
     return 0;
 }

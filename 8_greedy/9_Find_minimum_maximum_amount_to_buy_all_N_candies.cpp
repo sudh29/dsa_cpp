@@ -1,13 +1,14 @@
+#include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <vector>
-#include <algorithm>
-
-using namespace std;
 
 class Solution {
 public:
-    vector<int> candyStore(int candies[], int N, int K) {
-        sort(candies, candies + N);
+    std::vector<int> candyStore(std::vector<int> candies, int K) {
+        int N = static_cast<int>(candies.size());
+        if (N == 0) return {0, 0};
+        std::sort(candies.begin(), candies.end());
         int min_amt = 0, max_amt = 0;
 
         int i = 0, j = N - 1;
@@ -16,7 +17,8 @@ public:
             j -= K;
         }
 
-        i = N - 1; j = 0;
+        i = N - 1;
+        j = 0;
         while (i >= j) {
             max_amt += candies[i--];
             j += K;
@@ -27,8 +29,17 @@ public:
 
 int main() {
     Solution sol;
-    int candies[] = {3, 2, 1, 4};
-    auto res = sol.candyStore(candies, 4, 2);
-    cout << "Min candy amount: " << res[0] << ", Max candy amount: " << res[1] << endl;
+    std::vector<int> candies1 = {3, 2, 1, 4};
+    auto res1 = sol.candyStore(candies1, 2);
+    assert(res1[0] == 3 && res1[1] == 7);
+
+    std::vector<int> candies2 = {5};
+    auto res2 = sol.candyStore(candies2, 1);
+    assert(res2[0] == 5 && res2[1] == 5);
+
+    auto res3 = sol.candyStore({}, 1);
+    assert(res3[0] == 0 && res3[1] == 0);
+
+    std::cout << "9_Find_minimum_maximum_amount_to_buy_all_N_candies tests passed.\n";
     return 0;
 }

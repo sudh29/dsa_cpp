@@ -1,49 +1,61 @@
+#include <array>
+#include <cassert>
 #include <iostream>
+#include <memory>
+#include <span>
 #include <string>
+#include <string_view>
 #include <vector>
 
-using namespace std;
-
-struct TrieNode {
-    TrieNode* children[26];
-    bool isLeaf;
-
-    TrieNode() : isLeaf(false) {
-        for (int i = 0; i < 26; i++) children[i] = nullptr;
-    }
-};
+/**
+ * Problem: Word Break Problem using Trie
+ * Module: 13_Trie
+ * Time Complexity: O(N * L + S^2) where S is string length, N is dict size, L is word length
+ * Space Complexity: O(ALPHABET_SIZE * N * L + S)
+ *
+ * Description:
+ * Determines if a string can be segmented into a space-separated sequence
+ * of dictionary words using a Trie and dynamic programming memoization.
+ */
 
 class Solution {
 private:
-    TrieNode* root;
+    struct TrieNode {
+        std::array<std::unique_ptr<TrieNode>, 26> children{};
+        bool isLeaf{false};
+    };
 
-    void insert(const string &word) {
-        TrieNode* cur = root;
+    std::unique_ptr<TrieNode> root;
+
+    void insert(std::string_view word) {
+        TrieNode* cur = root.get();
         for (char c : word) {
-            int idx = c - 'a';
-            if (!cur->children[idx]) cur->children[idx] = new TrieNode();
-            cur = cur->children[idx];
+            size_t idx = static_cast<size_t>(c - 'a');
+            if (!cur->children[idx]) {
+                cur->children[idx] = std::make_unique<TrieNode>();
+            }
+            cur = cur->children[idx].get();
         }
         cur->isLeaf = true;
     }
 
-    bool search(const string &word) {
-        TrieNode* cur = root;
+    [[nodiscard]] bool search(std::string_view word) const {
+        const TrieNode* cur = root.get();
         for (char c : word) {
-            int idx = c - 'a';
+            size_t idx = static_cast<size_t>(c - 'a');
             if (!cur->children[idx]) return false;
-            cur = cur->children[idx];
+            cur = cur->children[idx].get();
         }
         return cur && cur->isLeaf;
     }
 
-public:
-    bool wordBreakHelper(const string &s, int start, vector<int> &memo) {
-        if (start == (int)s.length()) return true;
-        if (memo[start] != -1) return memo[start];
+    bool wordBreakHelper(std::string_view s, size_t start, std::vector<int>& memo) const {
+        if (start == s.length()) return true;
+        if (memo[start] != -1) return memo[start] == 1;
 
-        for (int end = start + 1; end <= (int)s.length(); end++) {
-            if (search(s.substr(start, end - start)) && wordBreakHelper(s, end, memo)) {
+        for (size_t end = start + 1; end <= s.length(); ++end) {
+            std::string_view prefix = s.substr(start, end - start);
+            if (search(prefix) && wordBreakHelper(s, end, memo)) {
                 memo[start] = 1;
                 return true;
             }
@@ -52,19 +64,37 @@ public:
         return false;
     }
 
-    int wordBreak(int n, string s, vector<string> &dictionary) {
-        root = new TrieNode();
-        for (int i = 0; i < n; i++) insert(dictionary[i]);
-        vector<int> memo(s.length(), -1);
-        return wordBreakHelper(s, 0, memo) ? 1 : 0;
+public:
+    bool wordBreak(std::string_view s, std::span<const std::string> dictionary) {
+        root = std::make_unique<TrieNode>();
+        for (const auto& word : dictionary) {
+            insert(word);
+        }
+
+        std::vector<int> memo(s.length(), -1);
+        return wordBreakHelper(s, 0, memo);
     }
 };
 
 int main() {
     Solution sol;
-    vector<string> dict = {"i", "like", "sam", "sung", "samsung", "mobile"};
-    int res = sol.wordBreak(dict.size(), "ilikesamsung", dict);
-    cout << "Word break 'ilikesamsung': " << res << endl;
-    if (res != 1) return 1;
+    std::vector<std::string> dict = {"i", "like", "sam", "sung", "samsung", "mobile", "ice", "cream"};
+
+    // Test Case 1: Standard segmentable string
+    assert(sol.wordBreak("ilikesamsung", dict) == true);
+
+    // Test Case 2: Segmentable with multiple combinations
+    assert(sol.wordBreak("icecream", dict) == true);
+
+    // Test Case 3: Empty string
+    assert(sol.wordBreak("", dict) == true);
+
+    // Test Case 4: Non-segmentable string
+    assert(sol.wordBreak("ilikeicecreamandpie", dict) == false);
+
+    // Test Case 5: Single character matches
+    assert(sol.wordBreak("i", dict) == true);
+
+    std::cout << "[PASS] 13_Trie/2_Word_Break_Problem_Trie_solution: all tests passed!\n";
     return 0;
 }

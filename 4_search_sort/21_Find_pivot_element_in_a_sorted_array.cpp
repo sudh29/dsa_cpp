@@ -1,8 +1,9 @@
+#include <cassert>
 #include <iostream>
+#include <span>
+#include <vector>
 
-using namespace std;
-
-int getPivotElement(int *arr, int left, int right) {
+int getPivotElement(std::span<const int> arr, int left, int right) {
     if (right < left) return -1;
     if (right == left) return left;
 
@@ -18,9 +19,18 @@ int getPivotElement(int *arr, int left, int right) {
 }
 
 int main() {
-    int arr[] = {4, 5, 6, 7, 8, 1, 2, 3};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    int pivot = getPivotElement(arr, 0, n - 1);
-    cout << "Pivot index: " << pivot << " (value: " << arr[pivot] << ")" << endl;
+    std::vector<int> arr1 = {4, 5, 6, 7, 8, 1, 2, 3};
+    int p1 = getPivotElement(arr1, 0, static_cast<int>(arr1.size()) - 1);
+    assert(p1 == 5 && arr1[p1] == 1);
+
+    std::vector<int> arr2 = {1, 2, 3};
+    int p2 = getPivotElement(arr2, 0, static_cast<int>(arr2.size()) - 1);
+    assert(p2 == 0);
+
+    std::vector<int> arr3 = {2, 1};
+    int p3 = getPivotElement(arr3, 0, static_cast<int>(arr3.size()) - 1);
+    assert(p3 == 1 && arr3[p3] == 1);
+
+    std::cout << "21_Find_pivot_element_in_a_sorted_array tests passed.\n";
     return 0;
 }

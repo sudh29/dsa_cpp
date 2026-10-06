@@ -1,13 +1,13 @@
+#include <cassert>
+#include <cctype>
 #include <iostream>
 #include <string>
-#include <vector>
-
-using namespace std;
+#include <string_view>
 
 class Solution {
 public:
-    string printSequence(string S) {
-        string keypad[] = {
+    std::string printSequence(std::string_view S) {
+        constexpr std::string_view keypad[] = {
             "2", "22", "222",
             "3", "33", "333",
             "4", "44", "444",
@@ -17,10 +17,13 @@ public:
             "8", "88", "888",
             "9", "99", "999", "9999"
         };
-        string output = "";
+        std::string output;
         for (char c : S) {
-            if (c == ' ') output += "0";
-            else if (isupper(c)) output += keypad[c - 'A'];
+            if (c == ' ') {
+                output += "0";
+            } else if (std::isupper(static_cast<unsigned char>(c))) {
+                output += keypad[c - 'A'];
+            }
         }
         return output;
     }
@@ -28,6 +31,12 @@ public:
 
 int main() {
     Solution sol;
-    cout << "Keypad sequence for 'HELLO WORLD': " << sol.printSequence("HELLO WORLD") << endl;
+    assert(sol.printSequence("HELLO WORLD") == "4433555555666096667775553");
+    assert(sol.printSequence("A") == "2");
+    assert(sol.printSequence("B") == "22");
+    assert(sol.printSequence(" ") == "0");
+    assert(sol.printSequence("GEEKSFORGEEKS") == "4333355777733366677743333557777");
+
+    std::cout << "19_Convert_sentence_into_its_equivalent_mobile_numeric_keypad_sequence tests passed.\n";
     return 0;
 }

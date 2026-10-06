@@ -1,7 +1,8 @@
+#include <algorithm>
+#include <cassert>
+#include <cmath>
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <cmath>
 
 long long findMinSum(std::vector<long long>& A, std::vector<long long>& B, int N) {
     std::sort(A.begin(), A.end());
@@ -16,6 +17,12 @@ long long findMinSum(std::vector<long long>& A, std::vector<long long>& B, int N
 int main() {
     std::vector<long long> A = {4, 1, 8, 7};
     std::vector<long long> B = {2, 3, 6, 5};
-    std::cout << "Min sum abs diff: " << findMinSum(A, B, A.size()) << " (expected 6)\n";
+    assert(findMinSum(A, B, static_cast<int>(A.size())) == 6);
+
+    std::vector<long long> A2 = {1};
+    std::vector<long long> B2 = {5};
+    assert(findMinSum(A2, B2, 1) == 4);
+
+    std::cout << "19_Minimum_sum_absolute_difference_pairs_two_arrays tests passed.\n";
     return 0;
 }

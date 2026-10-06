@@ -1,12 +1,14 @@
-#include <iostream>
-#include <vector>
-#include <queue>
+#include <cassert>
 #include <climits>
+#include <iostream>
+#include <queue>
+#include <utility>
+#include <vector>
 
 int findShortestPath(std::vector<std::vector<int>>& mat) {
-    int R = mat.size();
+    int R = static_cast<int>(mat.size());
     if (R == 0) return -1;
-    int C = mat[0].size();
+    int C = static_cast<int>(mat[0].size());
 
     // Mark unsafe cells
     std::vector<std::vector<int>> safe = mat;
@@ -67,6 +69,12 @@ int main() {
         {1, 1, 1, 1, 1},
         {1, 1, 1, 1, 1}
     };
-    std::cout << "Shortest safe path length: " << findShortestPath(mat) << "\n";
+    int path_len = findShortestPath(mat);
+    assert(path_len != -1);
+
+    std::vector<std::vector<int>> empty;
+    assert(findShortestPath(empty) == -1);
+
+    std::cout << "10_Find_shortest_safe_route_matrix tests passed.\n";
     return 0;
 }

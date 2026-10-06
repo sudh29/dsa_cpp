@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -19,5 +20,8 @@ int nCr(int n, int r) {
 int main() {
     std::cout << "C(5, 2): " << nCr(5, 2) << " (expected 10)\n";
     std::cout << "C(3, 2): " << nCr(3, 2) << " (expected 3)\n";
+    assert(nCr(5, 2) == 10);
+    assert(nCr(3, 2) == 3);
+
     return 0;
 }

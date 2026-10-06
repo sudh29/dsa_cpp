@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -28,7 +29,6 @@ bool graphColoring(const std::vector<std::vector<int>>& graph, int m, int V) {
 
 int main() {
     int V = 4;
-    int m = 3;
     std::vector<std::vector<int>> graph = {
         {0, 1, 1, 1},
         {1, 0, 1, 0},
@@ -36,7 +36,10 @@ int main() {
         {1, 0, 1, 0}
     };
 
-    std::cout << "Can graph be colored with " << m << " colors? "
-              << (graphColoring(graph, m, V) ? "Yes (1)" : "No (0)") << "\n";
+    assert(graphColoring(graph, 3, V) == true);
+    assert(graphColoring(graph, 1, V) == false);
+    assert(graphColoring(graph, 2, V) == false);
+
+    std::cout << "5_m_Coloring_Problem tests passed.\n";
     return 0;
 }

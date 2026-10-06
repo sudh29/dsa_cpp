@@ -1,6 +1,7 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <queue>
+#include <vector>
 
 // Kahn's Algorithm (BFS based topological sort)
 std::vector<int> topoSort(int V, const std::vector<std::vector<int>>& adj) {
@@ -45,8 +46,20 @@ int main() {
     adj[3].push_back(1);
 
     auto topo = topoSort(V, adj);
-    std::cout << "Topological Sort order: ";
-    for (int u : topo) std::cout << u << " ";
-    std::cout << "\n";
+    assert(static_cast<int>(topo.size()) == V);
+
+    std::vector<int> pos(V);
+    for (size_t i = 0; i < topo.size(); ++i) {
+        pos[topo[i]] = static_cast<int>(i);
+    }
+    for (int u = 0; u < V; ++u) {
+        for (int v : adj[u]) {
+            assert(pos[u] < pos[v]);
+        }
+    }
+
+    assert(topoSort(0, {}).empty());
+
+    std::cout << "13_Implement_Topological_Sort tests passed.\n";
     return 0;
 }

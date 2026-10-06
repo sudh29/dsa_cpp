@@ -1,6 +1,7 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 
 bool isPalindrome(const std::string& s, int low, int high) {
     while (low < high) {
@@ -35,11 +36,18 @@ std::vector<std::vector<std::string>> allPalindromicPerms(const std::string& S) 
 int main() {
     std::string s = "geeks";
     auto partitions = allPalindromicPerms(s);
-    std::cout << "Palindromic partitions of '" << s << "':\n";
+    assert(!partitions.empty());
     for (const auto& part : partitions) {
-        std::cout << "[ ";
-        for (const auto& w : part) std::cout << w << " ";
-        std::cout << "]\n";
+        std::string reconstructed;
+        for (const auto& w : part) {
+            reconstructed += w;
+            assert(isPalindrome(w, 0, static_cast<int>(w.length()) - 1));
+        }
+        assert(reconstructed == s);
     }
+
+    assert(allPalindromicPerms("a").size() == 1);
+
+    std::cout << "6_Print_all_palindromic_partitions_string tests passed.\n";
     return 0;
 }

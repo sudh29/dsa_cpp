@@ -1,8 +1,8 @@
+#include <algorithm>
+#include <cassert>
+#include <cmath>
 #include <iostream>
 #include <vector>
-#include <algorithm>
-
-using namespace std;
 
 struct Item {
     int value;
@@ -11,24 +11,24 @@ struct Item {
 
 class Solution {
 public:
-    static bool cmp(Item a, Item b) {
-        double r1 = (double)a.value / a.weight;
-        double r2 = (double)b.value / b.weight;
+    static bool cmp(const Item& a, const Item& b) {
+        double r1 = static_cast<double>(a.value) / a.weight;
+        double r2 = static_cast<double>(b.value) / b.weight;
         return r1 > r2;
     }
 
-    double fractionalKnapsack(int W, Item arr[], int n) {
-        sort(arr, arr + n, cmp);
+    double fractionalKnapsack(int W, std::vector<Item> arr) {
+        std::sort(arr.begin(), arr.end(), cmp);
         double totalValue = 0.0;
         int curWeight = 0;
 
-        for (int i = 0; i < n; i++) {
-            if (curWeight + arr[i].weight <= W) {
-                curWeight += arr[i].weight;
-                totalValue += arr[i].value;
+        for (const auto& item : arr) {
+            if (curWeight + item.weight <= W) {
+                curWeight += item.weight;
+                totalValue += item.value;
             } else {
                 int remain = W - curWeight;
-                totalValue += arr[i].value * ((double)remain / arr[i].weight);
+                totalValue += item.value * (static_cast<double>(remain) / item.weight);
                 break;
             }
         }
@@ -38,7 +38,13 @@ public:
 
 int main() {
     Solution sol;
-    Item arr[] = {{60, 10}, {100, 20}, {120, 30}};
-    cout << "Max fractional value: " << sol.fractionalKnapsack(50, arr, 3) << endl;
+    std::vector<Item> arr = {{60, 10}, {100, 20}, {120, 30}};
+    double val = sol.fractionalKnapsack(50, arr);
+    assert(std::abs(val - 240.0) < 1e-6);
+
+    assert(std::abs(sol.fractionalKnapsack(0, arr) - 0.0) < 1e-6);
+    assert(std::abs(sol.fractionalKnapsack(50, {}) - 0.0) < 1e-6);
+
+    std::cout << "4_Fractional_Knapsack_Problem tests passed.\n";
     return 0;
 }

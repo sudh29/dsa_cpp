@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -25,5 +26,7 @@ int main() {
         {0, 6, 4}
     };
     std::cout << "Max gold: " << maxGold(3, 3, mine) << " (expected 12)\n";
+    assert(maxGold(3, 3, mine) == 12);
+
     return 0;
 }

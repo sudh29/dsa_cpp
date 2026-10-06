@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -37,12 +38,14 @@ int makeConnected(int n, const std::vector<std::vector<int>>& connections) {
 int main() {
     int n = 4;
     std::vector<std::vector<int>> connections = {{0, 1}, {0, 2}, {1, 2}};
-    std::cout << "Minimum operations to make connected (n=4): "
-              << makeConnected(n, connections) << " (expected 1)\n";
+    assert(makeConnected(n, connections) == 1);
 
     int n2 = 6;
     std::vector<std::vector<int>> connections2 = {{0, 1}, {0, 2}, {0, 3}, {1, 2}, {1, 3}};
-    std::cout << "Minimum operations (n=6): "
-              << makeConnected(n2, connections2) << " (expected 2)\n";
+    assert(makeConnected(n2, connections2) == 2);
+
+    assert(makeConnected(4, {{0, 1}}) == -1);
+
+    std::cout << "10_Making_wired_Connections tests passed.\n";
     return 0;
 }

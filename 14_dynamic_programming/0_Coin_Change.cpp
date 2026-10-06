@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -16,5 +17,7 @@ int main() {
     std::vector<int> coins = {1, 2, 3};
     int sum = 4;
     std::cout << "Ways to make change for 4: " << countWays(coins, sum) << " (expected 4)\n";
+    assert(countWays(coins, sum) == 4);
+
     return 0;
 }

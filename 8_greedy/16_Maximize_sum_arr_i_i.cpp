@@ -1,6 +1,7 @@
+#include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 long long Maximize(std::vector<int>& a, int n) {
     long long mod = 1000000007;
@@ -14,6 +15,11 @@ long long Maximize(std::vector<int>& a, int n) {
 
 int main() {
     std::vector<int> a1 = {5, 3, 2, 4, 1};
-    std::cout << "Max sum: " << Maximize(a1, a1.size()) << " (expected 40)\n";
+    assert(Maximize(a1, static_cast<int>(a1.size())) == 40);
+
+    std::vector<int> a2 = {1, 2, 3};
+    assert(Maximize(a2, static_cast<int>(a2.size())) == 8);
+
+    std::cout << "16_Maximize_sum_arr_i_i tests passed.\n";
     return 0;
 }

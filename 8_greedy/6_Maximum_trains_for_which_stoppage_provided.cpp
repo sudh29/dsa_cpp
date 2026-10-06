@@ -1,8 +1,7 @@
+#include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <vector>
-#include <algorithm>
-
-using namespace std;
 
 struct Train {
     int arr, dep, plat;
@@ -10,16 +9,17 @@ struct Train {
 
 class Solution {
 public:
-    static bool comp(const Train &a, const Train &b) {
+    static bool comp(const Train& a, const Train& b) {
         return a.dep < b.dep;
     }
 
-    int maxStop(int n, int m, vector<vector<int>> &trains) {
-        vector<Train> t(m);
+    int maxStop(int n, int m, const std::vector<std::vector<int>>& trains) {
+        if (m == 0 || trains.empty()) return 0;
+        std::vector<Train> t(m);
         for (int i = 0; i < m; i++) t[i] = {trains[i][0], trains[i][1], trains[i][2]};
-        sort(t.begin(), t.end(), comp);
+        std::sort(t.begin(), t.end(), comp);
 
-        vector<int> platformDeparture(n + 1, -1);
+        std::vector<int> platformDeparture(n + 1, -1);
         int count = 0;
 
         for (int i = 0; i < m; i++) {
@@ -34,13 +34,16 @@ public:
 
 int main() {
     Solution sol;
-    vector<vector<int>> trains = {
+    std::vector<std::vector<int>> trains = {
         {1000, 1030, 1},
         {1010, 1020, 1},
         {1025, 1040, 1},
         {1130, 1145, 2},
         {1130, 1140, 2}
     };
-    cout << "Max stopped trains: " << sol.maxStop(2, 5, trains) << endl;
+    assert(sol.maxStop(2, 5, trains) == 3);
+    assert(sol.maxStop(2, 0, {}) == 0);
+
+    std::cout << "6_Maximum_trains_for_which_stoppage_provided tests passed.\n";
     return 0;
 }

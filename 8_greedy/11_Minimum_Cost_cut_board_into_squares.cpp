@@ -1,14 +1,13 @@
+#include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <vector>
-#include <algorithm>
-
-using namespace std;
 
 class Solution {
 public:
-    int minimumCostOfBreaking(vector<int> X, vector<int> Y, int M, int N) {
-        sort(X.rbegin(), X.rend());
-        sort(Y.rbegin(), Y.rend());
+    int minimumCostOfBreaking(std::vector<int> X, std::vector<int> Y, int M, int N) {
+        std::sort(X.rbegin(), X.rend());
+        std::sort(Y.rbegin(), Y.rend());
 
         int hzPieces = 1, vtPieces = 1;
         int i = 0, j = 0, totalCost = 0;
@@ -37,8 +36,12 @@ public:
 
 int main() {
     Solution sol;
-    vector<int> X = {2, 1, 3, 1, 4};
-    vector<int> Y = {4, 1, 2};
-    cout << "Minimum cost of cutting board: " << sol.minimumCostOfBreaking(X, Y, 6, 4) << endl;
+    std::vector<int> X = {2, 1, 3, 1, 4};
+    std::vector<int> Y = {4, 1, 2};
+    assert(sol.minimumCostOfBreaking(X, Y, 6, 4) == 42);
+
+    assert(sol.minimumCostOfBreaking({}, {}, 1, 1) == 0);
+
+    std::cout << "11_Minimum_Cost_cut_board_into_squares tests passed.\n";
     return 0;
 }

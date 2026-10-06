@@ -1,33 +1,40 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
+#include <vector>
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
-void inorder(Node* root) {
+void freeTree(Node* root) {
     if (!root) return;
-    inorder(root->left);
-    cout << root->data << " ";
-    inorder(root->right);
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
 }
 
-void preorder(Node* root) {
+void inorder(const Node* root, std::vector<int> &res) {
     if (!root) return;
-    cout << root->data << " ";
-    preorder(root->left);
-    preorder(root->right);
+    inorder(root->left, res);
+    res.push_back(root->data);
+    inorder(root->right, res);
 }
 
-void postorder(Node* root) {
+void preorder(const Node* root, std::vector<int> &res) {
     if (!root) return;
-    postorder(root->left);
-    postorder(root->right);
-    cout << root->data << " ";
+    res.push_back(root->data);
+    preorder(root->left, res);
+    preorder(root->right, res);
+}
+
+void postorder(const Node* root, std::vector<int> &res) {
+    if (!root) return;
+    postorder(root->left, res);
+    postorder(root->right, res);
+    res.push_back(root->data);
 }
 
 int main() {
@@ -35,8 +42,23 @@ int main() {
     root->left = new Node(2);
     root->right = new Node(3);
 
-    cout << "Inorder: "; inorder(root); cout << endl;
-    cout << "Preorder: "; preorder(root); cout << endl;
-    cout << "Postorder: "; postorder(root); cout << endl;
+    std::vector<int> in;
+    inorder(root, in);
+    std::vector<int> inExp = {2, 1, 3};
+    assert(in == inExp);
+
+    std::vector<int> pre;
+    preorder(root, pre);
+    std::vector<int> preExp = {1, 2, 3};
+    assert(pre == preExp);
+
+    std::vector<int> post;
+    postorder(root, post);
+    std::vector<int> postExp = {2, 3, 1};
+    assert(post == postExp);
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 35_tree_traversals_all: All tests passed.\n";
     return 0;
 }

@@ -1,8 +1,9 @@
+#include <algorithm>
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <list>
 #include <unordered_map>
-#include <algorithm>
+#include <vector>
 
 int pageFaults(int N, int C, const std::vector<int>& pages) {
     std::list<int> lru;
@@ -34,6 +35,11 @@ int pageFaults(int N, int C, const std::vector<int>& pages) {
 int main() {
     std::vector<int> pages = {5, 0, 1, 3, 2, 4, 1, 0, 5};
     int C = 4;
-    std::cout << "Page faults: " << pageFaults(pages.size(), C, pages) << " (expected 8)\n";
+    assert(pageFaults(static_cast<int>(pages.size()), C, pages) == 8);
+
+    std::vector<int> pages2 = {1, 2, 1, 3};
+    assert(pageFaults(static_cast<int>(pages2.size()), 2, pages2) == 3);
+
+    std::cout << "21_Page_Faults_LRU tests passed.\n";
     return 0;
 }

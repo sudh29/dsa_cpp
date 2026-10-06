@@ -1,12 +1,11 @@
+#include <cassert>
 #include <iostream>
-#include <string>
+#include <string_view>
 #include <vector>
 
-using namespace std;
-
-vector<int> computeLPS(const string &pat) {
-    int m = pat.length();
-    vector<int> lps(m, 0);
+std::vector<int> computeLPS(std::string_view pat) {
+    int m = static_cast<int>(pat.length());
+    std::vector<int> lps(m, 0);
     int len = 0, i = 1;
 
     while (i < m) {
@@ -24,32 +23,46 @@ vector<int> computeLPS(const string &pat) {
     return lps;
 }
 
-vector<int> KMPSearch(const string &pat, const string &txt) {
-    int m = pat.length(), n = txt.length();
-    vector<int> lps = computeLPS(pat);
-    vector<int> matches;
+std::vector<int> KMPSearch(std::string_view pat, std::string_view txt) {
+    int m = static_cast<int>(pat.length());
+    int n = static_cast<int>(txt.length());
+    if (m == 0 || n < m) return {};
+
+    std::vector<int> lps = computeLPS(pat);
+    std::vector<int> matches;
     int i = 0, j = 0;
 
     while (i < n) {
         if (pat[j] == txt[i]) {
-            i++; j++;
+            i++;
+            j++;
         }
         if (j == m) {
             matches.push_back(i - j);
             j = lps[j - 1];
         } else if (i < n && pat[j] != txt[i]) {
-            if (j != 0) j = lps[j - 1];
-            else i++;
+            if (j != 0) {
+                j = lps[j - 1];
+            } else {
+                i++;
+            }
         }
     }
     return matches;
 }
 
 int main() {
-    string txt = "ABABDABACDABABCABAB", pat = "ABABCABAB";
+    std::string_view txt = "ABABDABACDABABCABAB", pat = "ABABCABAB";
     auto res = KMPSearch(pat, txt);
-    cout << "KMP pattern found at index: ";
-    for (int idx : res) cout << idx << " ";
-    cout << endl;
+    std::vector<int> expected = {10};
+    assert(res == expected);
+
+    std::string_view txt2 = "AAAAABAAABA", pat2 = "AAAA";
+    std::vector<int> expected2 = {0, 1};
+    assert(KMPSearch(pat2, txt2) == expected2);
+
+    assert(KMPSearch("XYZ", "ABC").empty());
+
+    std::cout << "18_KMP_Algo tests passed.\n";
     return 0;
 }

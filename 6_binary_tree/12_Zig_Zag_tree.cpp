@@ -1,32 +1,38 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <queue>
-
-using namespace std;
+#include <vector>
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
+
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
 
 class Solution {
 public:
-    vector<int> zigZagTraversal(Node* root) {
-        vector<int> res;
+    std::vector<int> zigZagTraversal(const Node* root) const {
+        std::vector<int> res;
         if (!root) return res;
-        queue<Node*> q;
+        std::queue<const Node*> q;
         q.push(root);
         bool leftToRight = true;
 
         while (!q.empty()) {
-            int sz = q.size();
-            vector<int> level(sz);
-            for (int i = 0; i < sz; i++) {
-                Node* cur = q.front();
+            size_t sz = q.size();
+            std::vector<int> level(sz);
+            for (size_t i = 0; i < sz; ++i) {
+                const Node* cur = q.front();
                 q.pop();
-                int idx = leftToRight ? i : (sz - 1 - i);
+                size_t idx = leftToRight ? i : (sz - 1 - i);
                 level[idx] = cur->data;
                 if (cur->left) q.push(cur->left);
                 if (cur->right) q.push(cur->right);
@@ -47,8 +53,14 @@ int main() {
 
     Solution sol;
     auto res = sol.zigZagTraversal(root);
-    cout << "ZigZag traversal: ";
-    for (int v : res) cout << v << " ";
-    cout << endl;
+    // Level 1: [1], Level 2 (R to L): [3, 2], Level 3 (L to R): [4, 5]
+    std::vector<int> expected = {1, 3, 2, 4, 5};
+    assert(res == expected);
+
+    assert(sol.zigZagTraversal(nullptr).empty());
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 12_Zig_Zag_tree: All tests passed.\n";
     return 0;
 }

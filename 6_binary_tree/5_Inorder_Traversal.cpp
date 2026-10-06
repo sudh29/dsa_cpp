@@ -1,26 +1,33 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 class Solution {
-public:
-    void inorderHelper(Node* root, vector<int> &res) {
+private:
+    void inorderHelper(const Node* root, std::vector<int> &res) const {
         if (!root) return;
         inorderHelper(root->left, res);
         res.push_back(root->data);
         inorderHelper(root->right, res);
     }
 
-    vector<int> inorderTraversal(Node* root) {
-        vector<int> res;
+public:
+    std::vector<int> inorderTraversal(const Node* root) const {
+        std::vector<int> res;
         inorderHelper(root, res);
         return res;
     }
@@ -33,8 +40,13 @@ int main() {
 
     Solution sol;
     auto res = sol.inorderTraversal(root);
-    cout << "Inorder: ";
-    for (int v : res) cout << v << " ";
-    cout << endl;
+    std::vector<int> expected = {1, 3, 2};
+    assert(res == expected);
+
+    assert(sol.inorderTraversal(nullptr).empty());
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 5_Inorder_Traversal: All tests passed.\n";
     return 0;
 }

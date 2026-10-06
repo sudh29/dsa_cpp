@@ -1,18 +1,24 @@
-#include <iostream>
 #include <algorithm>
-
-using namespace std;
+#include <cassert>
+#include <iostream>
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 class Solution {
-public:
-    void solve(Node* root, int len, int sum, int &maxLen, int &maxSum) {
+private:
+    void solve(const Node* root, int len, int sum, int &maxLen, int &maxSum) const {
         if (!root) return;
         sum += root->data;
         if (!root->left && !root->right) {
@@ -20,7 +26,7 @@ public:
                 maxLen = len;
                 maxSum = sum;
             } else if (len == maxLen) {
-                maxSum = max(maxSum, sum);
+                maxSum = std::max(maxSum, sum);
             }
             return;
         }
@@ -28,8 +34,11 @@ public:
         solve(root->right, len + 1, sum, maxLen, maxSum);
     }
 
-    int sumOfLongRootToLeafPath(Node *root) {
-        int maxLen = 0, maxSum = 0;
+public:
+    int sumOfLongRootToLeafPath(const Node *root) const {
+        if (!root) return 0;
+        int maxLen = 0;
+        int maxSum = 0;
         solve(root, 1, 0, maxLen, maxSum);
         return maxSum;
     }
@@ -46,6 +55,12 @@ int main() {
     root->left->right->left = new Node(6);
 
     Solution sol;
-    cout << "Sum of nodes on longest root-to-leaf path: " << sol.sumOfLongRootToLeafPath(root) << endl;
+    // Longest path: 4 -> 2 -> 1 -> 6 (length 4), sum = 4 + 2 + 1 + 6 = 13
+    assert(sol.sumOfLongRootToLeafPath(root) == 13);
+    assert(sol.sumOfLongRootToLeafPath(nullptr) == 0);
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 25_Sum_Nodes_Longest_path_from_root_leaf_node: All tests passed.\n";
     return 0;
 }

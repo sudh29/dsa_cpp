@@ -1,22 +1,27 @@
+#include <cassert>
 #include <iostream>
+#include <span>
+#include <vector>
 
-using namespace std;
-
-void rotate(int arr[], int n) {
-    if (n <= 1) return;
-    int last = arr[n - 1];
-    for (int i = n - 1; i > 0; i--) {
+void rotate(std::span<int> arr) {
+    if (arr.size() <= 1) return;
+    int last = arr.back();
+    for (size_t i = arr.size() - 1; i > 0; --i) {
         arr[i] = arr[i - 1];
     }
     arr[0] = last;
 }
 
 int main() {
-    int arr[] = {1, 2, 3, 4, 5};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    rotate(arr, n);
-    cout << "Cyclically rotated by one: ";
-    for (int i = 0; i < n; i++) cout << arr[i] << " ";
-    cout << endl;
+    std::vector<int> arr = {1, 2, 3, 4, 5};
+    rotate(arr);
+    std::vector<int> expected = {5, 1, 2, 3, 4};
+    assert(arr == expected);
+
+    std::vector<int> single = {10};
+    rotate(single);
+    assert(single == (std::vector<int>{10}));
+
+    std::cout << "1_array 6_Cyclically_rotate_an_array_by_one: All tests passed.\n";
     return 0;
 }

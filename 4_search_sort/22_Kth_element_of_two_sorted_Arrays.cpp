@@ -1,15 +1,18 @@
-#include <iostream>
 #include <algorithm>
+#include <cassert>
 #include <climits>
-
-using namespace std;
+#include <iostream>
+#include <span>
+#include <vector>
 
 class Solution {
 public:
-    int kthElement(int arr1[], int arr2[], int n, int m, int k) {
-        if (n > m) return kthElement(arr2, arr1, m, n, k);
+    int kthElement(std::span<const int> arr1, std::span<const int> arr2, int k) {
+        int n = static_cast<int>(arr1.size());
+        int m = static_cast<int>(arr2.size());
+        if (n > m) return kthElement(arr2, arr1, k);
 
-        int low = max(0, k - m), high = min(k, n);
+        int low = std::max(0, k - m), high = std::min(k, n);
         while (low <= high) {
             int cut1 = (low + high) >> 1;
             int cut2 = k - cut1;
@@ -20,7 +23,7 @@ public:
             int r2 = cut2 == m ? INT_MAX : arr2[cut2];
 
             if (l1 <= r2 && l2 <= r1) {
-                return max(l1, l2);
+                return std::max(l1, l2);
             } else if (l1 > r2) {
                 high = cut1 - 1;
             } else {
@@ -33,9 +36,18 @@ public:
 
 int main() {
     Solution sol;
-    int arr1[] = {2, 3, 6, 7, 9};
-    int arr2[] = {1, 4, 8, 10};
-    int k = 5;
-    cout << k << "-th element: " << sol.kthElement(arr1, arr2, 5, 4, k) << endl;
+    std::vector<int> arr1 = {2, 3, 6, 7, 9};
+    std::vector<int> arr2 = {1, 4, 8, 10};
+    assert(sol.kthElement(arr1, arr2, 5) == 6);
+
+    std::vector<int> a = {100, 112, 256, 349, 770};
+    std::vector<int> b = {72, 86, 113, 119, 265, 445, 892};
+    assert(sol.kthElement(a, b, 7) == 256);
+
+    std::vector<int> c = {1}, d = {2};
+    assert(sol.kthElement(c, d, 1) == 1);
+    assert(sol.kthElement(c, d, 2) == 2);
+
+    std::cout << "22_Kth_element_of_two_sorted_Arrays tests passed.\n";
     return 0;
 }

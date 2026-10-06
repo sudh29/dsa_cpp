@@ -1,6 +1,7 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <queue>
+#include <vector>
 
 std::vector<int> minimumTime(int n, int m, const std::vector<std::vector<int>>& edges) {
     (void)m;
@@ -49,9 +50,13 @@ int main() {
     };
 
     auto ans = minimumTime(n, m, edges);
-    std::cout << "Minimum time taken by jobs 1.." << n << ":\n";
-    for (int i = 0; i < n; ++i) {
-        std::cout << "Job " << (i + 1) << ": " << ans[i] << " unit(s)\n";
-    }
+    assert(ans.size() == 10);
+    assert(ans[0] == 1); // Job 1
+    assert(ans[1] == 1); // Job 2
+    assert(ans[2] == 2); // Job 3
+
+    assert(minimumTime(0, 0, {}).empty());
+
+    std::cout << "14_Minimum_time_taken_job_completed_Directed_Acyclic_Graph tests passed.\n";
     return 0;
 }

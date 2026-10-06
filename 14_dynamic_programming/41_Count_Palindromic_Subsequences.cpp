@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -27,5 +28,8 @@ int main() {
     std::cout << "Count PS of 'abcd': " << countPS(s) << " (expected 4)\n";
     std::string s2 = "aab";
     std::cout << "Count PS of 'aab': " << countPS(s2) << " (expected 4)\n";
+    assert(countPS(s) == 4);
+    assert(countPS(s2) == 4);
+
     return 0;
 }

@@ -1,6 +1,7 @@
+#include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <string>
-#include <algorithm>
 
 void solve(std::string& str, int k, std::string& max_str, size_t idx) {
     if (k == 0 || idx == str.length()) return;
@@ -35,12 +36,11 @@ std::string findMaximumNum(std::string str, int k) {
 }
 
 int main() {
-    std::string s1 = "1234567";
-    int k1 = 4;
-    std::cout << "Max num after " << k1 << " swaps: " << findMaximumNum(s1, k1) << " (expected 7654321)\n";
+    assert(findMaximumNum("1234567", 4) == "7654321");
+    assert(findMaximumNum("3435335", 3) == "5543333");
+    assert(findMaximumNum("123", 0) == "123");
+    assert(findMaximumNum("", 2) == "");
 
-    std::string s2 = "3435335";
-    int k2 = 3;
-    std::cout << "Max num after " << k2 << " swaps: " << findMaximumNum(s2, k2) << " (expected 5543333)\n";
+    std::cout << "12_Largest_number_K_swaps tests passed.\n";
     return 0;
 }

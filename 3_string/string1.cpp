@@ -1,11 +1,11 @@
+#include <cassert>
 #include <iostream>
-#include <string>
+#include <string_view>
 
-using namespace std;
-
-int naivePatternSearch(const string &text, const string &pattern) {
+int naivePatternSearch(std::string_view text, std::string_view pattern) {
     if (pattern.empty()) return 0;
-    int n = text.length(), m = pattern.length();
+    int n = static_cast<int>(text.length());
+    int m = static_cast<int>(pattern.length());
     for (int i = 0; i <= n - m; i++) {
         int j = 0;
         while (j < m && text[i + j] == pattern[j]) j++;
@@ -15,9 +15,13 @@ int naivePatternSearch(const string &text, const string &pattern) {
 }
 
 int main() {
-    string text = "aaaaaabc";
-    string p1 = "abc", p2 = "xyz";
-    cout << "Pattern '" << p1 << "' in '" << text << "': index " << naivePatternSearch(text, p1) << endl;
-    cout << "Pattern '" << p2 << "' in '" << text << "': index " << naivePatternSearch(text, p2) << endl;
+    std::string_view text = "aaaaaabc";
+    assert(naivePatternSearch(text, "abc") == 5);
+    assert(naivePatternSearch(text, "xyz") == -1);
+    assert(naivePatternSearch(text, "") == 0);
+    assert(naivePatternSearch("hello", "ell") == 1);
+    assert(naivePatternSearch("a", "a") == 0);
+
+    std::cout << "string1 tests passed.\n";
     return 0;
 }

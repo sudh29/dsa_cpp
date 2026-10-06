@@ -1,13 +1,13 @@
+#include <cassert>
 #include <iostream>
 #include <string>
-
-using namespace std;
+#include <string_view>
 
 class Solution {
 public:
-    string removeConsecutiveCharacter(string S) {
+    std::string removeConsecutiveCharacter(std::string_view S) {
         if (S.empty()) return "";
-        string res = "";
+        std::string res;
         res += S[0];
         for (size_t i = 1; i < S.length(); i++) {
             if (S[i] != S[i - 1]) res += S[i];
@@ -18,7 +18,12 @@ public:
 
 int main() {
     Solution sol;
-    string s = "aabaa";
-    cout << "Removed consecutive characters from " << s << ": " << sol.removeConsecutiveCharacter(s) << endl;
+    assert(sol.removeConsecutiveCharacter("aabaa") == "aba");
+    assert(sol.removeConsecutiveCharacter("aabb") == "ab");
+    assert(sol.removeConsecutiveCharacter("a") == "a");
+    assert(sol.removeConsecutiveCharacter("aaaaa") == "a");
+    assert(sol.removeConsecutiveCharacter("") == "");
+
+    std::cout << "37_Remove_Consecutive_Characters tests passed.\n";
     return 0;
 }

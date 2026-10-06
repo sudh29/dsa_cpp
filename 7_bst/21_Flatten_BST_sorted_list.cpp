@@ -1,12 +1,12 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
+#include <vector>
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
 void inorderFlatten(Node* cur, Node*& prev) {
@@ -19,14 +19,12 @@ void inorderFlatten(Node* cur, Node*& prev) {
 }
 
 Node* flatten(Node* root) {
-    Node* dummy = new Node(-1);
-    Node* prev = dummy;
+    Node dummy(-1);
+    Node* prev = &dummy;
     inorderFlatten(root, prev);
     prev->left = nullptr;
     prev->right = nullptr;
-    Node* ret = dummy->right;
-    delete dummy;
-    return ret;
+    return dummy.right;
 }
 
 int main() {
@@ -36,8 +34,22 @@ int main() {
     root->left->left = new Node(2);
 
     Node* flat = flatten(root);
-    cout << "Flattened sorted list: ";
-    while (flat) { cout << flat->data << " "; flat = flat->right; }
-    cout << endl;
+
+    std::vector<int> vals;
+    for (Node* curr = flat; curr != nullptr; curr = curr->right) {
+        assert(curr->left == nullptr);
+        vals.push_back(curr->data);
+    }
+    std::vector<int> expected = {2, 3, 5, 7};
+    assert(vals == expected);
+
+    // Free the singly-linked list of nodes
+    while (flat) {
+        Node* tmp = flat;
+        flat = flat->right;
+        delete tmp;
+    }
+
+    std::cout << "7_bst 21_Flatten_BST_sorted_list: All tests passed.\n";
     return 0;
 }

@@ -1,6 +1,8 @@
+#include <cassert>
+#include <functional>
 #include <iostream>
-#include <vector>
 #include <queue>
+#include <vector>
 
 long long minCost(std::vector<long long>& arr, int n) {
     std::priority_queue<long long, std::vector<long long>, std::greater<long long>> pq;
@@ -19,7 +21,12 @@ long long minCost(std::vector<long long>& arr, int n) {
 }
 
 int main() {
-    std::vector<long long> arr = {4, 3, 2, 6};
-    std::cout << "Min cost connecting ropes: " << minCost(arr, arr.size()) << " (expected 29)\n";
+    std::vector<long long> arr1 = {4, 3, 2, 6};
+    assert(minCost(arr1, static_cast<int>(arr1.size())) == 29);
+
+    std::vector<long long> arr2 = {1, 2, 3};
+    assert(minCost(arr2, static_cast<int>(arr2.size())) == 9);
+
+    std::cout << "31_Minimum_Cost_ropes tests passed.\n";
     return 0;
 }

@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -25,5 +26,7 @@ int longestPalinSubseq(const std::string& S) {
 int main() {
     std::string s = "bbabcbcab";
     std::cout << "LPS length of 'bbabcbcab': " << longestPalinSubseq(s) << " (expected 7)\n";
+    assert(longestPalinSubseq(s) == 7);
+
     return 0;
 }

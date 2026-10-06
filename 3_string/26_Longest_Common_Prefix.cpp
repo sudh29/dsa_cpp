@@ -1,14 +1,14 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <string>
-
-using namespace std;
+#include <string_view>
+#include <vector>
 
 class Solution {
 public:
-    string longestCommonPrefix(vector<string>& strs) {
+    std::string longestCommonPrefix(const std::vector<std::string>& strs) {
         if (strs.empty()) return "";
-        string prefix = strs[0];
+        std::string prefix = strs[0];
 
         for (size_t i = 1; i < strs.size(); i++) {
             while (strs[i].find(prefix) != 0) {
@@ -22,7 +22,21 @@ public:
 
 int main() {
     Solution sol;
-    vector<string> strs = {"flower", "flow", "flight"};
-    cout << "Longest common prefix: " << sol.longestCommonPrefix(strs) << endl;
+    std::vector<std::string> strs1 = {"flower", "flow", "flight"};
+    assert(sol.longestCommonPrefix(strs1) == "fl");
+
+    std::vector<std::string> strs2 = {"dog", "racecar", "car"};
+    assert(sol.longestCommonPrefix(strs2) == "");
+
+    std::vector<std::string> strs3 = {"interstellar", "interactive", "internet"};
+    assert(sol.longestCommonPrefix(strs3) == "inter");
+
+    std::vector<std::string> strs4 = {"single"};
+    assert(sol.longestCommonPrefix(strs4) == "single");
+
+    std::vector<std::string> strs5 = {};
+    assert(sol.longestCommonPrefix(strs5) == "");
+
+    std::cout << "26_Longest_Common_Prefix tests passed.\n";
     return 0;
 }

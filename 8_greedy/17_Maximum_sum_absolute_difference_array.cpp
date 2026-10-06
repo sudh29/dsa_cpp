@@ -1,7 +1,8 @@
+#include <algorithm>
+#include <cassert>
+#include <cmath>
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <cmath>
 
 long long maxSumPermutation(long long N) {
     if (N == 1) return 1;
@@ -9,7 +10,7 @@ long long maxSumPermutation(long long N) {
 }
 
 long long maxConsecutiveDiffSum(std::vector<int>& arr) {
-    int n = arr.size();
+    int n = static_cast<int>(arr.size());
     std::sort(arr.begin(), arr.end());
     std::vector<int> reordered;
     int i = 0, j = n - 1;
@@ -28,10 +29,12 @@ long long maxConsecutiveDiffSum(std::vector<int>& arr) {
 }
 
 int main() {
-    long long N = 4;
-    std::cout << "Max sum for permutation 1..N (N=4): " << maxSumPermutation(N) << "\n";
+    assert(maxSumPermutation(4) == 7);
+    assert(maxSumPermutation(1) == 1);
 
     std::vector<int> arr = {1, 2, 4, 8};
-    std::cout << "Max sum absolute diff (array {1, 2, 4, 8}): " << maxConsecutiveDiffSum(arr) << "\n";
+    assert(maxConsecutiveDiffSum(arr) == 18);
+
+    std::cout << "17_Maximum_sum_absolute_difference_array tests passed.\n";
     return 0;
 }

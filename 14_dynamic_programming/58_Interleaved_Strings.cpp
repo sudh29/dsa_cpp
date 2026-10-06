@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -31,5 +32,8 @@ int main() {
     std::string A = "aabcc", B = "dbbca", C = "aadbbcbcac";
     std::cout << "Is interleaved: " << (isInterleave(A, B, C) ? "YES" : "NO") << " (expected YES)\n";
     std::cout << "Is interleaved: " << (isInterleave("aabcc", "dbbca", "aadbbbaccc") ? "YES" : "NO") << " (expected NO)\n";
+    assert(isInterleave(A, B, C) == true);
+    assert(isInterleave("aabcc", "dbbca", "aadbbbaccc") == false);
+
     return 0;
 }

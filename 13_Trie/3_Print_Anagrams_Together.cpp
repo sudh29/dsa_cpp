@@ -1,24 +1,35 @@
-#include <iostream>
-#include <string>
-#include <vector>
 #include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <span>
+#include <string>
 #include <unordered_map>
+#include <vector>
 
-using namespace std;
+/**
+ * Problem: Print / Group Anagrams Together
+ * Module: 13_Trie
+ * Time Complexity: O(N * K log K) where N is number of words, K is max length
+ * Space Complexity: O(N * K)
+ *
+ * Description:
+ * Groups words that are mutual anagrams using sorted canonical keys.
+ */
 
 class Solution {
 public:
-    vector<vector<string>> Anagrams(vector<string>& string_list) {
-        unordered_map<string, vector<string>> groups;
-        for (const string &word : string_list) {
-            string sortedKey = word;
-            sort(sortedKey.begin(), sortedKey.end());
+    std::vector<std::vector<std::string>> groupAnagrams(std::span<const std::string> words) {
+        std::unordered_map<std::string, std::vector<std::string>> groups;
+        for (const auto& word : words) {
+            std::string sortedKey = word;
+            std::sort(sortedKey.begin(), sortedKey.end());
             groups[sortedKey].push_back(word);
         }
 
-        vector<vector<string>> res;
-        for (auto &[key, words] : groups) {
-            res.push_back(words);
+        std::vector<std::vector<std::string>> res;
+        res.reserve(groups.size());
+        for (auto& [key, group] : groups) {
+            res.push_back(std::move(group));
         }
         return res;
     }
@@ -26,14 +37,41 @@ public:
 
 int main() {
     Solution sol;
-    vector<string> words = {"act", "god", "cat", "dog", "tac"};
-    auto res = sol.Anagrams(words);
-    cout << "Anagram groups:\n";
-    for (const auto &g : res) {
-        cout << "[ ";
-        for (const string &w : g) cout << w << " ";
-        cout << "] ";
+
+    // Test Case 1: Standard anagram group set
+    {
+        std::vector<std::string> words = {"act", "god", "cat", "dog", "tac"};
+        auto res = sol.groupAnagrams(words);
+        assert(res.size() == 2);
+        size_t total_count = 0;
+        for (const auto& group : res) {
+            total_count += group.size();
+        }
+        assert(total_count == 5);
     }
-    cout << endl;
+
+    // Test Case 2: All identical anagrams
+    {
+        std::vector<std::string> words = {"abc", "bca", "cab"};
+        auto res = sol.groupAnagrams(words);
+        assert(res.size() == 1);
+        assert(res[0].size() == 3);
+    }
+
+    // Test Case 3: No anagrams
+    {
+        std::vector<std::string> words = {"apple", "banana", "orange"};
+        auto res = sol.groupAnagrams(words);
+        assert(res.size() == 3);
+    }
+
+    // Test Case 4: Empty list
+    {
+        std::vector<std::string> empty_words;
+        auto res = sol.groupAnagrams(empty_words);
+        assert(res.empty());
+    }
+
+    std::cout << "[PASS] 13_Trie/3_Print_Anagrams_Together: all tests passed!\n";
     return 0;
 }
