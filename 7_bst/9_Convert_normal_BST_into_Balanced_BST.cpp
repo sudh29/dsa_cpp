@@ -1,45 +1,53 @@
+#include <cassert>
 #include <iostream>
+#include <span>
 #include <vector>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 class Solution {
-public:
-    void inorder(Node* root, vector<Node*> &nodes) {
+private:
+    void inorder(Node* root, std::vector<Node*> &nodes) {
         if (!root) return;
         inorder(root->left, nodes);
         nodes.push_back(root);
         inorder(root->right, nodes);
     }
 
-    Node* buildBalanced(const vector<Node*> &nodes, int start, int end) {
+    Node* buildBalanced(std::span<Node*> nodes, int start, int end) {
         if (start > end) return nullptr;
-        int mid = (start + end) / 2;
+        int mid = start + (end - start) / 2;
         Node* root = nodes[mid];
         root->left = buildBalanced(nodes, start, mid - 1);
         root->right = buildBalanced(nodes, mid + 1, end);
         return root;
     }
 
+public:
     Node* buildBalancedTree(Node* root) {
-        vector<Node*> nodes;
+        std::vector<Node*> nodes;
         inorder(root, nodes);
-        return buildBalanced(nodes, 0, nodes.size() - 1);
+        return buildBalanced(nodes, 0, static_cast<int>(nodes.size()) - 1);
     }
 };
 
-void preorder(Node* root) {
+void getPreorder(const Node* root, std::vector<int> &res) {
     if (!root) return;
-    cout << root->data << " ";
-    preorder(root->left);
-    preorder(root->right);
+    res.push_back(root->data);
+    getPreorder(root->left, res);
+    getPreorder(root->right, res);
 }
 
 int main() {
@@ -50,8 +58,14 @@ int main() {
 
     Solution sol;
     root = sol.buildBalancedTree(root);
-    cout << "Preorder of balanced BST: ";
-    preorder(root);
-    cout << endl;
+
+    std::vector<int> pre;
+    getPreorder(root, pre);
+    std::vector<int> expected = {2, 1, 3, 4};
+    assert(pre == expected);
+
+    freeTree(root);
+
+    std::cout << "7_bst 9_Convert_normal_BST_into_Balanced_BST: All tests passed.\n";
     return 0;
 }

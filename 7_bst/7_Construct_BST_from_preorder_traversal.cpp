@@ -1,45 +1,59 @@
-#include <iostream>
-#include <vector>
+#include <cassert>
 #include <climits>
-
-using namespace std;
+#include <iostream>
+#include <span>
+#include <vector>
 
 struct TreeNode {
     int val;
     TreeNode* left;
     TreeNode* right;
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    explicit TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
 
+void freeTree(TreeNode* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 class Solution {
-public:
-    TreeNode* build(const vector<int> &preorder, int &idx, int bound) {
-        if (idx == (int)preorder.size() || preorder[idx] > bound) return nullptr;
+private:
+    TreeNode* build(std::span<const int> preorder, size_t &idx, int bound) {
+        if (idx == preorder.size() || preorder[idx] > bound) return nullptr;
         TreeNode* root = new TreeNode(preorder[idx++]);
         root->left = build(preorder, idx, root->val);
         root->right = build(preorder, idx, bound);
         return root;
     }
 
-    TreeNode* bstFromPreorder(vector<int>& preorder) {
-        int idx = 0;
+public:
+    TreeNode* bstFromPreorder(std::span<const int> preorder) {
+        size_t idx = 0;
         return build(preorder, idx, INT_MAX);
     }
 };
 
-void inorder(TreeNode* root) {
+void getInorder(const TreeNode* root, std::vector<int> &res) {
     if (!root) return;
-    inorder(root->left);
-    cout << root->val << " ";
-    inorder(root->right);
+    getInorder(root->left, res);
+    res.push_back(root->val);
+    getInorder(root->right, res);
 }
 
 int main() {
     Solution sol;
-    vector<int> pre = {8, 5, 1, 7, 10, 12};
+    std::vector<int> pre = {8, 5, 1, 7, 10, 12};
     TreeNode* root = sol.bstFromPreorder(pre);
-    cout << "Inorder of constructed BST: ";
-    inorder(root);
-    cout << endl;
+
+    std::vector<int> in;
+    getInorder(root, in);
+    std::vector<int> expected = {1, 5, 7, 8, 10, 12};
+    assert(in == expected);
+
+    freeTree(root);
+
+    std::cout << "7_bst 7_Construct_BST_from_preorder_traversal: All tests passed.\n";
     return 0;
 }

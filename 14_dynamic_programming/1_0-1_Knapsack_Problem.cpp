@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -17,5 +18,7 @@ int main() {
     std::vector<int> wt = {10, 20, 30};
     int W = 50;
     std::cout << "Max 0-1 Knapsack value: " << knapSack(W, wt, val, val.size()) << " (expected 220)\n";
+    assert(knapSack(W, wt, val, val.size()) == 220);
+
     return 0;
 }

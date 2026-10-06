@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -17,5 +18,8 @@ int maximizeTheCuts(int n, int x, int y, int z) {
 int main() {
     std::cout << "Max cuts for n=4, cuts=(2,1,1): " << maximizeTheCuts(4, 2, 1, 1) << " (expected 4)\n";
     std::cout << "Max cuts for n=5, cuts=(5,3,2): " << maximizeTheCuts(5, 5, 3, 2) << " (expected 2)\n";
+    assert(maximizeTheCuts(4, 2, 1, 1) == 4);
+    assert(maximizeTheCuts(5, 5, 3, 2) == 2);
+
     return 0;
 }

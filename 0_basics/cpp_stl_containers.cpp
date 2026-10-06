@@ -1,30 +1,41 @@
+#include <algorithm>
+#include <cassert>
 #include <iostream>
-#include <vector>
+#include <ranges>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <algorithm>
+#include <vector>
+
+/**
+ * Topic: C++ STL Containers & Modern C++20 Ranges
+ * Module: 0_basics
+ */
 
 int main() {
-    std::cout << "=== C++ STL Containers (Vector, Map, Set) ===" << std::endl;
-
-    // std::vector
+    // std::vector & std::ranges::sort
     std::vector<int> nums = {5, 2, 9, 1, 5, 6};
-    std::sort(nums.begin(), nums.end());
-    std::cout << "Sorted vector: ";
-    for (int n : nums) std::cout << n << " ";
-    std::cout << std::endl;
+    std::ranges::sort(nums);
+    assert(std::ranges::is_sorted(nums));
+    assert(nums.front() == 1);
+    assert(nums.back() == 9);
 
-    // std::unordered_set
+    // std::unordered_set (Deduplication)
     std::unordered_set<int> unique_vals(nums.begin(), nums.end());
-    std::cout << "Unique elements count: " << unique_vals.size() << std::endl;
+    assert(unique_vals.size() == 5);
+    assert(unique_vals.contains(5));
+    assert(!unique_vals.contains(42));
 
-    // std::unordered_map
+    // std::unordered_map & structured bindings
     std::unordered_map<std::string, int> freq;
     freq["apple"] = 3;
     freq["banana"] = 5;
-    for (const auto &[key, count] : freq) {
-        std::cout << "Key: " << key << " -> Value: " << count << std::endl;
-    }
 
+    assert(freq.contains("apple"));
+    assert(freq["apple"] == 3);
+    assert(freq["banana"] == 5);
+    assert(!freq.contains("cherry"));
+
+    std::cout << "[PASS] 0_basics/cpp_stl_containers: all tests passed!\n";
     return 0;
 }

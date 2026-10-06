@@ -1,29 +1,35 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
-void leftViewUtil(Node* root, int level, int &max_level, vector<int> &res) {
+void freeTree(Node* root) {
     if (!root) return;
-    if (max_level < level) {
-        res.push_back(root->data);
-        max_level = level;
-    }
-    leftViewUtil(root->left, level + 1, max_level, res);
-    leftViewUtil(root->right, level + 1, max_level, res);
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
 }
 
-vector<int> leftView(Node *root) {
-    vector<int> res;
-    int max_level = 0;
-    leftViewUtil(root, 1, max_level, res);
+void leftViewUtil(const Node* root, int level, int &maxLevel, std::vector<int> &res) {
+    if (!root) return;
+    if (maxLevel < level) {
+        res.push_back(root->data);
+        maxLevel = level;
+    }
+    leftViewUtil(root->left, level + 1, maxLevel, res);
+    leftViewUtil(root->right, level + 1, maxLevel, res);
+}
+
+std::vector<int> leftView(const Node *root) {
+    std::vector<int> res;
+    int maxLevel = 0;
+    leftViewUtil(root, 1, maxLevel, res);
     return res;
 }
 
@@ -35,8 +41,13 @@ int main() {
     root->right->right = new Node(5);
 
     auto res = leftView(root);
-    cout << "Left view: ";
-    for (int v : res) cout << v << " ";
-    cout << endl;
+    std::vector<int> expected = {1, 2, 4};
+    assert(res == expected);
+
+    assert(leftView(nullptr).empty());
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 8_Left_View_tree: All tests passed.\n";
     return 0;
 }

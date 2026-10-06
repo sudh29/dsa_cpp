@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -18,5 +19,7 @@ int maxSubstring(const std::string& S) {
 int main() {
     std::string s = "11000010001";
     std::cout << "Max difference zeros and ones: " << maxSubstring(s) << " (expected 6)\n";
+    assert(maxSubstring(s) == 6);
+
     return 0;
 }

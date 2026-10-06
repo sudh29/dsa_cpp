@@ -1,22 +1,29 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
-#include <queue>
 #include <map>
-
-using namespace std;
+#include <queue>
+#include <utility>
+#include <vector>
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
-vector<int> bottomView(Node *root) {
-    vector<int> res;
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
+std::vector<int> bottomView(const Node *root) {
+    std::vector<int> res;
     if (!root) return res;
-    map<int, int> botNode;
-    queue<pair<Node*, int>> q;
+    std::map<int, int> botNode;
+    std::queue<std::pair<const Node*, int>> q;
     q.push({root, 0});
 
     while (!q.empty()) {
@@ -27,7 +34,10 @@ vector<int> bottomView(Node *root) {
         if (cur->right) q.push({cur->right, hd + 1});
     }
 
-    for (const auto &[hd, val] : botNode) res.push_back(val);
+    res.reserve(botNode.size());
+    for (const auto &[hd, val] : botNode) {
+        res.push_back(val);
+    }
     return res;
 }
 
@@ -40,8 +50,15 @@ int main() {
     root->right->right = new Node(25);
 
     auto res = bottomView(root);
-    cout << "Bottom view: ";
-    for (int v : res) cout << v << " ";
-    cout << endl;
+    // hd -2: 5, hd -1: 8 (or overwritten if child exists? wait: 3 has hd 0! root has hd 0. So 3 overwrites 20), hd 1: 22, hd 2: 25
+    // hd -2: 5, hd -1: 8, hd 0: 3, hd 1: 22, hd 2: 25
+    std::vector<int> expected = {5, 8, 3, 22, 25};
+    assert(res == expected);
+
+    assert(bottomView(nullptr).empty());
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 11_Bottom_View_tree: All tests passed.\n";
     return 0;
 }

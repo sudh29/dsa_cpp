@@ -1,7 +1,8 @@
+#include <algorithm>
+#include <cassert>
+#include <climits>
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <climits>
 
 long long findMinDiff(std::vector<long long>& A, int N, int M) {
     if (M == 0 || N == 0 || M > N) return 0;
@@ -19,6 +20,13 @@ long long findMinDiff(std::vector<long long>& A, int N, int M) {
 int main() {
     std::vector<long long> A = {3, 4, 1, 9, 56, 7, 9, 12};
     int M = 5;
-    std::cout << "Min chocolate diff: " << findMinDiff(A, A.size(), M) << " (expected 6)\n";
+    assert(findMinDiff(A, static_cast<int>(A.size()), M) == 6);
+
+    std::vector<long long> A2 = {7, 3, 2, 4, 9, 12, 56};
+    assert(findMinDiff(A2, static_cast<int>(A2.size()), 3) == 2);
+
+    assert(findMinDiff(A, 0, 5) == 0);
+
+    std::cout << "23_Chocolate_Distribution_Problem tests passed.\n";
     return 0;
 }

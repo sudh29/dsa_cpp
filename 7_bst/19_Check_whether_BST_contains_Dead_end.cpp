@@ -1,33 +1,42 @@
+#include <cassert>
 #include <iostream>
 #include <unordered_set>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 class Solution {
-public:
-    void storeNodes(Node* root, unordered_set<int> &all_nodes, unordered_set<int> &leaf_nodes) {
+private:
+    void storeNodes(const Node* root, std::unordered_set<int> &allNodes, std::unordered_set<int> &leafNodes) {
         if (!root) return;
-        all_nodes.insert(root->data);
-        if (!root->left && !root->right) leaf_nodes.insert(root->data);
-        storeNodes(root->left, all_nodes, leaf_nodes);
-        storeNodes(root->right, all_nodes, leaf_nodes);
+        allNodes.insert(root->data);
+        if (!root->left && !root->right) {
+            leafNodes.insert(root->data);
+        }
+        storeNodes(root->left, allNodes, leafNodes);
+        storeNodes(root->right, allNodes, leafNodes);
     }
 
-    bool isDeadEnd(Node *root) {
-        unordered_set<int> all_nodes, leaf_nodes;
-        all_nodes.insert(0);
-        storeNodes(root, all_nodes, leaf_nodes);
+public:
+    bool isDeadEnd(const Node *root) {
+        std::unordered_set<int> allNodes;
+        std::unordered_set<int> leafNodes;
+        allNodes.insert(0); // Lower bound for natural numbers
+        storeNodes(root, allNodes, leafNodes);
 
-        for (int val : leaf_nodes) {
-            if (all_nodes.find(val - 1) != all_nodes.end() &&
-                all_nodes.find(val + 1) != all_nodes.end()) {
+        for (int val : leafNodes) {
+            if (allNodes.contains(val - 1) && allNodes.contains(val + 1)) {
                 return true;
             }
         }
@@ -44,6 +53,18 @@ int main() {
     root->left->left->left = new Node(1);
 
     Solution sol;
-    cout << "Contains dead end: " << (sol.isDeadEnd(root) ? "Yes" : "No") << endl;
+    // Node 1 has adjacent 0 and 2 in tree, so it is a dead end
+    assert(sol.isDeadEnd(root));
+
+    // Construct a tree without dead ends: 8 -> left: 5, right: 11
+    Node* root2 = new Node(8);
+    root2->left = new Node(5);
+    root2->right = new Node(11);
+    assert(!sol.isDeadEnd(root2));
+
+    freeTree(root);
+    freeTree(root2);
+
+    std::cout << "7_bst 19_Check_whether_BST_contains_Dead_end: All tests passed.\n";
     return 0;
 }

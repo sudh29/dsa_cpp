@@ -1,22 +1,22 @@
-#include <iostream>
-#include <vector>
 #include <algorithm>
-
-using namespace std;
+#include <cassert>
+#include <iostream>
+#include <span>
+#include <vector>
 
 class Solution {
 public:
-    void dfs(int w, int &minDia, int &endpoint, const vector<int> &cd, const vector<int> &wt) {
+    void dfs(int w, int& minDia, int& endpoint, const std::vector<int>& cd, const std::vector<int>& wt) {
         if (cd[w] == 0) {
             endpoint = w;
             return;
         }
-        minDia = min(minDia, wt[w]);
+        minDia = std::min(minDia, wt[w]);
         dfs(cd[w], minDia, endpoint, cd, wt);
     }
 
-    vector<vector<int>> solve(int n, int p, vector<int> a, vector<int> b, vector<int> d) {
-        vector<int> cd(n + 1, 0), rd(n + 1, 0), wt(n + 1, 0);
+    std::vector<std::vector<int>> solve(int n, int p, std::span<const int> a, std::span<const int> b, std::span<const int> d) {
+        std::vector<int> cd(n + 1, 0), rd(n + 1, 0), wt(n + 1, 0);
 
         for (int i = 0; i < p; i++) {
             cd[a[i]] = b[i];
@@ -24,7 +24,7 @@ public:
             rd[b[i]] = a[i];
         }
 
-        vector<vector<int>> res;
+        std::vector<std::vector<int>> res;
         for (int j = 1; j <= n; j++) {
             if (rd[j] == 0 && cd[j] > 0) {
                 int minDia = 1e9, endpoint = 0;
@@ -38,10 +38,12 @@ public:
 
 int main() {
     Solution sol;
-    vector<int> a = {7, 5, 4, 2, 9, 3};
-    vector<int> b = {4, 9, 6, 8, 7, 1};
-    vector<int> d = {98, 72, 10, 22, 17, 66};
+    std::vector<int> a = {7, 5, 4, 2, 9, 3};
+    std::vector<int> b = {4, 9, 6, 8, 7, 1};
+    std::vector<int> d = {98, 72, 10, 22, 17, 66};
     auto res = sol.solve(9, 6, a, b, d);
-    cout << "Water connection components count: " << res.size() << endl;
+    assert(res.size() == 3);
+
+    std::cout << "3_Water_Connection_Problem tests passed.\n";
     return 0;
 }

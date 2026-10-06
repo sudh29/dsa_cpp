@@ -1,17 +1,23 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
+
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
 
 class Solution {
 public:
-    int getCount(Node *root, int l, int h) {
+    int getCount(const Node *root, int l, int h) const {
         if (!root) return 0;
         if (root->data >= l && root->data <= h) {
             return 1 + getCount(root->left, l, h) + getCount(root->right, l, h);
@@ -32,6 +38,14 @@ int main() {
     root->right->right = new Node(100);
 
     Solution sol;
-    cout << "Count in range [5, 45]: " << sol.getCount(root, 5, 45) << endl;
+    // Nodes in range [5, 45]: 5, 10, 40 (count = 3)
+    assert(sol.getCount(root, 5, 45) == 3);
+    assert(sol.getCount(root, 1, 100) == 6);
+    assert(sol.getCount(root, 50, 100) == 2);
+    assert(sol.getCount(root, 200, 300) == 0);
+
+    freeTree(root);
+
+    std::cout << "7_bst 15_Count_BST_nodes_lie_range: All tests passed.\n";
     return 0;
 }

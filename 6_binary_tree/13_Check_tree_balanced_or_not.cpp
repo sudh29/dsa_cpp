@@ -1,40 +1,57 @@
-#include <iostream>
 #include <algorithm>
+#include <cassert>
 #include <cmath>
-
-using namespace std;
+#include <iostream>
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 class Solution {
-public:
-    int checkHeight(Node* root) {
+private:
+    int checkHeight(const Node* root) const {
         if (!root) return 0;
         int lh = checkHeight(root->left);
         if (lh == -1) return -1;
         int rh = checkHeight(root->right);
         if (rh == -1) return -1;
-        if (abs(lh - rh) > 1) return -1;
-        return 1 + max(lh, rh);
+        if (std::abs(lh - rh) > 1) return -1;
+        return 1 + std::max(lh, rh);
     }
 
-    bool isBalanced(Node *root) {
+public:
+    bool isBalanced(const Node *root) const {
         return checkHeight(root) != -1;
     }
 };
 
 int main() {
+    Solution sol;
+    assert(sol.isBalanced(nullptr));
+
     Node* root = new Node(1);
     root->left = new Node(2);
     root->right = new Node(3);
     root->left->left = new Node(4);
 
-    Solution sol;
-    cout << "Is balanced: " << (sol.isBalanced(root) ? "Yes" : "No") << endl;
+    assert(sol.isBalanced(root));
+
+    // Make unbalanced
+    root->left->left->left = new Node(5);
+    assert(!sol.isBalanced(root));
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 13_Check_tree_balanced_or_not: All tests passed.\n";
     return 0;
 }

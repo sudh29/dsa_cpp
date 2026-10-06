@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -16,9 +17,9 @@ void dfs(std::vector<std::vector<char>>& grid, int r, int c, int n, int m) {
 }
 
 int numIslands(std::vector<std::vector<char>>& grid) {
-    int n = grid.size();
+    int n = static_cast<int>(grid.size());
     if (n == 0) return 0;
-    int m = grid[0].size();
+    int m = static_cast<int>(grid[0].size());
 
     int count = 0;
     for (int i = 0; i < n; ++i) {
@@ -38,6 +39,11 @@ int main() {
         {'0', '0', '1', '1', '0', '1', '0'}
     };
 
-    std::cout << "Number of islands (8-connected): " << numIslands(grid) << " (expected 2)\n";
+    assert(numIslands(grid) == 2);
+
+    std::vector<std::vector<char>> empty;
+    assert(numIslands(empty) == 0);
+
+    std::cout << "16_Find_the_no_of_islands tests passed.\n";
     return 0;
 }

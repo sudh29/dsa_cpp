@@ -1,35 +1,43 @@
-#include <iostream>
+#include <cassert>
+#include <cstdio>
 #include <fstream>
+#include <iostream>
 #include <string>
+#include <vector>
+
+/**
+ * Topic: C++ File I/O Demonstration
+ * Module: 0_basics
+ */
 
 int main() {
-    std::cout << "=== C++ File I/O Demonstration ===" << std::endl;
-    const std::string filename = "temp_demo.txt";
+    const std::string filename = "/tmp/demo_file_io_test.txt";
 
     // Writing
-    std::ofstream outfile(filename);
-    if (!outfile.is_open()) {
-        std::cerr << "Error opening file for write\n";
-        return 1;
+    {
+        std::ofstream outfile(filename);
+        assert(outfile.is_open());
+        outfile << "Line 1: DSA in C++20\n";
+        outfile << "Line 2: Fast, Robust, Efficient\n";
     }
-    outfile << "Line 1: DSA in C and C++\n";
-    outfile << "Line 2: Fast, Robust, Efficient\n";
-    outfile.close();
 
-    // Reading
-    std::ifstream infile(filename);
-    if (!infile.is_open()) {
-        std::cerr << "Error opening file for read\n";
-        return 1;
+    // Reading & verification
+    {
+        std::ifstream infile(filename);
+        assert(infile.is_open());
+        std::string line;
+        std::vector<std::string> lines;
+        while (std::getline(infile, line)) {
+            lines.push_back(line);
+        }
+        assert(lines.size() == 2);
+        assert(lines[0] == "Line 1: DSA in C++20");
+        assert(lines[1] == "Line 2: Fast, Robust, Efficient");
     }
-    std::string line;
-    std::cout << "Read contents:\n";
-    while (std::getline(infile, line)) {
-        std::cout << "  " << line << std::endl;
-    }
-    infile.close();
 
     // Clean up temporary file
-    std::remove(filename.c_str());
+    assert(std::remove(filename.c_str()) == 0);
+
+    std::cout << "[PASS] 0_basics/cpp_file_io: all tests passed!\n";
     return 0;
 }

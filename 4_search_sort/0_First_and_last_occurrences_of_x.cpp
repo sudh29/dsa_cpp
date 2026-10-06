@@ -1,13 +1,14 @@
-#include <iostream>
-#include <vector>
+#include <cassert>
 #include <climits>
+#include <iostream>
+#include <span>
+#include <vector>
 
-using namespace std;
-
-vector<int> find(int arr[], int n, int x) {
-    int start = 0, end = n - 1, mid, temp = -1;
+std::vector<int> find(std::span<const int> arr, int x) {
+    int n = static_cast<int>(arr.size());
+    int start = 0, end = n - 1, temp = -1;
     while (start <= end) {
-        mid = start + (end - start) / 2;
+        int mid = start + (end - start) / 2;
         if (arr[mid] == x) {
             temp = mid;
             break;
@@ -27,10 +28,13 @@ vector<int> find(int arr[], int n, int x) {
 }
 
 int main() {
-    int arr[] = {1, 3, 5, 5, 5, 5, 67, 123, 125};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    int x = 5;
-    vector<int> res = find(arr, n, x);
-    cout << "First and last occurrences of " << x << ": [" << res[0] << ", " << res[1] << "]" << endl;
+    std::vector<int> arr = {1, 3, 5, 5, 5, 5, 67, 123, 125};
+    assert(find(arr, 5) == (std::vector<int>{2, 5}));
+    assert(find(arr, 1) == (std::vector<int>{0, 0}));
+    assert(find(arr, 125) == (std::vector<int>{8, 8}));
+    assert(find(arr, 999) == (std::vector<int>{-1, -1}));
+    assert(find({}, 5) == (std::vector<int>{-1, -1}));
+
+    std::cout << "0_First_and_last_occurrences_of_x tests passed.\n";
     return 0;
 }

@@ -1,7 +1,8 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
+#include <vector>
 
 class Graph {
 private:
@@ -13,6 +14,14 @@ public:
         if (bidirectional) {
             adjList[v].push_back({u, dist});
         }
+    }
+
+    size_t numVertices() const {
+        return adjList.size();
+    }
+
+    const auto& getAdj() const {
+        return adjList;
     }
 
     void printAdj() const {
@@ -34,7 +43,12 @@ int main() {
     g.addEdge("1", "2", 8, false);
     g.addEdge("7", "8", 7, false);
 
-    std::cout << "Graph Adjacency List:\n";
-    g.printAdj();
+    assert(g.numVertices() == 3);
+    const auto& adj = g.getAdj();
+    assert(adj.at("0").size() == 2);
+    assert(adj.at("1").size() == 2);
+    assert(adj.at("7").size() == 1);
+
+    std::cout << "0_Create_Graph_print tests passed.\n";
     return 0;
 }

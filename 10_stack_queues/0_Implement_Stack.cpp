@@ -1,20 +1,18 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
-
-using namespace std;
 
 class Stack {
 private:
     int topIndex;
     int capacity;
-    vector<int> arr;
+    std::vector<int> arr;
 
 public:
-    Stack(int cap = 100) : topIndex(-1), capacity(cap), arr(cap) {}
+    explicit Stack(int cap = 100) : topIndex(-1), capacity(cap), arr(cap) {}
 
     bool push(int x) {
         if (topIndex >= capacity - 1) {
-            cout << "Stack Overflow\n";
             return false;
         }
         arr[++topIndex] = x;
@@ -23,33 +21,55 @@ public:
 
     int pop() {
         if (topIndex < 0) {
-            cout << "Stack Underflow\n";
             return -1;
         }
         return arr[topIndex--];
     }
 
-    int peek() {
+    [[nodiscard]] int peek() const {
         if (topIndex < 0) return -1;
         return arr[topIndex];
     }
 
-    bool isEmpty() {
+    [[nodiscard]] bool isEmpty() const {
         return topIndex < 0;
     }
 
-    int size() {
+    [[nodiscard]] int size() const {
         return topIndex + 1;
     }
 };
 
 int main() {
     Stack s(5);
-    s.push(10);
-    s.push(20);
-    s.push(30);
-    cout << "Top element: " << s.peek() << endl;
-    cout << "Popped: " << s.pop() << endl;
-    cout << "Top after pop: " << s.peek() << endl;
+    assert(s.isEmpty());
+    assert(s.size() == 0);
+    assert(s.peek() == -1);
+
+    assert(s.push(10));
+    assert(s.push(20));
+    assert(s.push(30));
+    assert(s.size() == 3);
+    assert(!s.isEmpty());
+    assert(s.peek() == 30);
+
+    assert(s.pop() == 30);
+    assert(s.peek() == 20);
+    assert(s.size() == 2);
+
+    assert(s.push(40));
+    assert(s.push(50));
+    assert(s.push(60));
+    assert(!s.push(70)); // Overflow at capacity 5
+
+    assert(s.pop() == 60);
+    assert(s.pop() == 50);
+    assert(s.pop() == 40);
+    assert(s.pop() == 20);
+    assert(s.pop() == 10);
+    assert(s.pop() == -1); // Underflow
+    assert(s.isEmpty());
+
+    std::cout << "10_stack_queues 0_Implement_Stack: All tests passed.\n";
     return 0;
 }

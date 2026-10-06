@@ -1,17 +1,16 @@
+#include <cassert>
 #include <iostream>
-#include <string>
 #include <stack>
-
-using namespace std;
+#include <string_view>
 
 class Solution {
 public:
-    bool ispar(string x) {
-        stack<char> s;
+    bool ispar(std::string_view x) {
+        std::stack<char> s;
         for (char c : x) {
             if (c == '(' || c == '{' || c == '[') {
                 s.push(c);
-            } else {
+            } else if (c == ')' || c == '}' || c == ']') {
                 if (s.empty()) return false;
                 char top = s.top();
                 if ((c == ')' && top == '(') ||
@@ -29,9 +28,14 @@ public:
 
 int main() {
     Solution sol;
-    string s1 = "{([])}";
-    string s2 = "([)]";
-    cout << s1 << ": " << (sol.ispar(s1) ? "Balanced" : "Not Balanced") << endl;
-    cout << s2 << ": " << (sol.ispar(s2) ? "Balanced" : "Not Balanced") << endl;
+    assert(sol.ispar("{([])}"));
+    assert(!sol.ispar("([)]"));
+    assert(sol.ispar("()"));
+    assert(sol.ispar(""));
+    assert(!sol.ispar("("));
+    assert(!sol.ispar(")"));
+    assert(!sol.ispar("({[}])"));
+
+    std::cout << "10_stack_queues 5_Parenthesis_Checker: All tests passed.\n";
     return 0;
 }

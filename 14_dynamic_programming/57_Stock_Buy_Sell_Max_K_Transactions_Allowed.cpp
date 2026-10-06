@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -21,5 +22,7 @@ int main() {
     std::vector<int> A = {10, 22, 5, 75, 65, 80};
     int K = 2;
     std::cout << "Max profit with K=2: " << maxProfit(K, A.size(), A) << " (expected 87)\n";
+    assert(maxProfit(K, A.size(), A) == 87);
+
     return 0;
 }

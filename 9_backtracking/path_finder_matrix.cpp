@@ -1,4 +1,6 @@
+#include <cassert>
 #include <iostream>
+#include <utility>
 #include <vector>
 
 bool findPath(const std::vector<std::vector<int>>& mat, int x, int y, int n,
@@ -35,14 +37,15 @@ int main() {
     int n = 5;
     std::vector<std::pair<int, int>> path;
 
-    if (matrix[0][0] == 1 && findPath(matrix, 0, 0, n, path)) {
-        std::cout << "Path found: ";
-        for (const auto& pt : path) {
-            std::cout << "(" << pt.first << ", " << pt.second << ") ";
-        }
-        std::cout << "\n";
-    } else {
-        std::cout << "No path exists\n";
-    }
+    bool found = matrix[0][0] == 1 && findPath(matrix, 0, 0, n, path);
+    assert(found);
+    assert(path.front() == (std::pair<int, int>{0, 0}));
+    assert(path.back() == (std::pair<int, int>{4, 4}));
+
+    std::vector<std::vector<int>> blocked = {{0}};
+    std::vector<std::pair<int, int>> p2;
+    assert(!(blocked[0][0] == 1 && findPath(blocked, 0, 0, 1, p2)));
+
+    std::cout << "path_finder_matrix tests passed.\n";
     return 0;
 }

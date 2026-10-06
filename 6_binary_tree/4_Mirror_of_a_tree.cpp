@@ -1,31 +1,38 @@
-#include <iostream>
 #include <algorithm>
-
-using namespace std;
+#include <cassert>
+#include <iostream>
+#include <vector>
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
+
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
 
 class Solution {
 public:
     Node* invertTree(Node* root) {
         if (!root) return nullptr;
-        swap(root->left, root->right);
+        std::swap(root->left, root->right);
         invertTree(root->left);
         invertTree(root->right);
         return root;
     }
 };
 
-void inorder(Node* root) {
+void getInorder(const Node* root, std::vector<int> &res) {
     if (!root) return;
-    inorder(root->left);
-    cout << root->data << " ";
-    inorder(root->right);
+    getInorder(root->left, res);
+    res.push_back(root->data);
+    getInorder(root->right, res);
 }
 
 int main() {
@@ -35,8 +42,14 @@ int main() {
 
     Solution sol;
     sol.invertTree(root);
-    cout << "Inorder of mirrored tree: ";
-    inorder(root);
-    cout << endl;
+
+    std::vector<int> in;
+    getInorder(root, in);
+    std::vector<int> expected = {3, 1, 2};
+    assert(in == expected);
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 4_Mirror_of_a_tree: All tests passed.\n";
     return 0;
 }

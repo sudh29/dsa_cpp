@@ -1,14 +1,20 @@
+#include <cassert>
 #include <iostream>
 
-int main() {
-    std::cout << "=== Compiler and System Details ===" << std::endl;
-#if defined(__clang__)
-    std::cout << "Compiler: Clang " << __clang_version__ << std::endl;
-#elif defined(__GNUC__)
-    std::cout << "Compiler: GCC " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << std::endl;
-#endif
+/**
+ * Topic: Compiler & System Architecture Verification
+ * Module: 0_basics
+ */
 
-    std::cout << "C++ Standard (__cplusplus): " << __cplusplus << std::endl;
-    std::cout << "Pointer size: " << sizeof(void*) * 8 << "-bit" << std::endl;
+int main() {
+    // Verify 64-bit architecture
+    static_assert(sizeof(void*) == 8, "Expected 64-bit target");
+    assert(sizeof(void*) == 8);
+
+    // Verify C++20 standard compliance (202002L or newer)
+    static_assert(__cplusplus >= 202002L, "Expected C++20 standard or newer");
+    assert(__cplusplus >= 202002L);
+
+    std::cout << "[PASS] 0_basics/system_details: all tests passed!\n";
     return 0;
 }

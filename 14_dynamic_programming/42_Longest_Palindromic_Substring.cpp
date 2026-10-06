@@ -1,9 +1,10 @@
+#include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <string>
-#include <algorithm>
 
 std::string longestPalindrome(const std::string& s) {
-    int n = s.length();
+    int n = static_cast<int>(s.length());
     if (n <= 1) return s;
 
     int start = 0, max_len = 1;
@@ -29,6 +30,13 @@ std::string longestPalindrome(const std::string& s) {
 
 int main() {
     std::string s = "babad";
-    std::cout << "Longest palindromic substring of 'babad': " << longestPalindrome(s) << "\n";
+    std::string res = longestPalindrome(s);
+    assert(res == "bab" || res == "aba");
+
+    assert(longestPalindrome("cbbd") == "bb");
+    assert(longestPalindrome("a") == "a");
+    assert(longestPalindrome("").empty());
+
+    std::cout << "42_Longest_Palindromic_Substring tests passed.\n";
     return 0;
 }

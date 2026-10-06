@@ -1,26 +1,32 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <queue>
-
-using namespace std;
+#include <vector>
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
+
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
 
 class Solution {
 public:
-    vector<int> levelOrder(Node* root) {
-        vector<int> res;
+    std::vector<int> levelOrder(const Node* root) {
+        std::vector<int> res;
         if (!root) return res;
-        queue<Node*> q;
+        std::queue<const Node*> q;
         q.push(root);
 
         while (!q.empty()) {
-            Node* cur = q.front();
+            const Node* cur = q.front();
             q.pop();
             res.push_back(cur->data);
             if (cur->left) q.push(cur->left);
@@ -39,8 +45,13 @@ int main() {
 
     Solution sol;
     auto res = sol.levelOrder(root);
-    cout << "Level order: ";
-    for (int v : res) cout << v << " ";
-    cout << endl;
+    std::vector<int> expected = {1, 2, 3, 4, 5};
+    assert(res == expected);
+
+    assert(sol.levelOrder(nullptr).empty());
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 0_Level_order_traversal: All tests passed.\n";
     return 0;
 }

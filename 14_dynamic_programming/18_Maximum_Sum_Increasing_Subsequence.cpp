@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -19,5 +20,7 @@ int maxSumIS(const std::vector<int>& arr, int n) {
 int main() {
     std::vector<int> arr = {1, 101, 2, 3, 100, 4, 5};
     std::cout << "Max Sum Increasing Subsequence: " << maxSumIS(arr, arr.size()) << " (expected 106)\n";
+    assert(maxSumIS(arr, arr.size()) == 106);
+
     return 0;
 }

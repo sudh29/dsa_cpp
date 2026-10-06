@@ -1,23 +1,27 @@
-#include <iostream>
-#include <vector>
 #include <algorithm>
-
-using namespace std;
+#include <cassert>
+#include <iostream>
+#include <span>
+#include <vector>
 
 class Solution {
 public:
-    int kthSmallest(int arr[], int l, int r, int k) {
-        vector<int> v(arr + l, arr + r + 1);
-        nth_element(v.begin(), v.begin() + k - 1, v.end());
+    int kthSmallest(std::span<const int> arr, size_t k) {
+        assert(k > 0 && k <= arr.size());
+        std::vector<int> v(arr.begin(), arr.end());
+        std::nth_element(v.begin(), v.begin() + k - 1, v.end());
         return v[k - 1];
     }
 };
 
 int main() {
     Solution sol;
-    int arr[] = {7, 10, 4, 3, 20, 15};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    int k = 3;
-    cout << k << "-th smallest: " << sol.kthSmallest(arr, 0, n - 1, k) << endl;
+    std::vector<int> arr = {7, 10, 4, 3, 20, 15};
+    // Sorted: 3, 4, 7, 10, 15, 20
+    assert(sol.kthSmallest(arr, 1) == 3);
+    assert(sol.kthSmallest(arr, 3) == 7);
+    assert(sol.kthSmallest(arr, 6) == 20);
+
+    std::cout << "1_array 2_Kth_smallest_element: All tests passed.\n";
     return 0;
 }

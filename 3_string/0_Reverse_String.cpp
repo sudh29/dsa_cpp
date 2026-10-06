@@ -1,25 +1,32 @@
-#include <iostream>
-#include <vector>
 #include <algorithm>
-
-using namespace std;
+#include <cassert>
+#include <iostream>
+#include <span>
+#include <vector>
 
 class Solution {
 public:
-    void reverseString(vector<char>& s) {
-        int l = 0, r = (int)s.size() - 1;
+    void reverseString(std::span<char> s) {
+        if (s.empty()) return;
+        size_t l = 0, r = s.size() - 1;
         while (l < r) {
-            swap(s[l++], s[r--]);
+            std::swap(s[l++], s[r--]);
         }
     }
 };
 
 int main() {
     Solution sol;
-    vector<char> s = {'h', 'e', 'l', 'l', 'o'};
-    sol.reverseString(s);
-    cout << "Reversed: ";
-    for (char c : s) cout << c;
-    cout << endl;
+    std::vector<char> s1 = {'h', 'e', 'l', 'l', 'o'};
+    sol.reverseString(s1);
+    std::vector<char> exp1 = {'o', 'l', 'l', 'e', 'h'};
+    assert(s1 == exp1);
+
+    std::vector<char> s2 = {'H', 'a', 'n', 'n', 'a', 'h'};
+    sol.reverseString(s2);
+    std::vector<char> exp2 = {'h', 'a', 'n', 'n', 'a', 'H'};
+    assert(s2 == exp2);
+
+    std::cout << "3_string 0_Reverse_String: All tests passed.\n";
     return 0;
 }

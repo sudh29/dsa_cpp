@@ -1,13 +1,16 @@
+#include <cassert>
 #include <iostream>
-#include <string>
 #include <stack>
+#include <string>
+#include <string_view>
 
-using namespace std;
-
-string reverseString(string str) {
-    stack<char> s;
-    for (char c : str) s.push(c);
-    string res = "";
+std::string reverseString(std::string_view str) {
+    std::stack<char> s;
+    for (char c : str) {
+        s.push(c);
+    }
+    std::string res;
+    res.reserve(str.size());
     while (!s.empty()) {
         res += s.top();
         s.pop();
@@ -16,7 +19,11 @@ string reverseString(string str) {
 }
 
 int main() {
-    string str = "GeeksforGeeks";
-    cout << "Original: " << str << " | Reversed: " << reverseString(str) << endl;
+    assert(reverseString("GeeksforGeeks") == "skeeGrofskeeG");
+    assert(reverseString("hello") == "olleh");
+    assert(reverseString("a") == "a");
+    assert(reverseString("").empty());
+
+    std::cout << "10_stack_queues 6_Reverse_a_String_using_Stack: All tests passed.\n";
     return 0;
 }

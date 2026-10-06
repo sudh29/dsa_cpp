@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -21,5 +22,7 @@ int main() {
     std::vector<int> arr = {1, 3, 4, 9, 10, 11, 12, 17, 20};
     int k = 4;
     std::cout << "Min removals: " << removals(arr, arr.size(), k) << " (expected 5)\n";
+    assert(removals(arr, arr.size(), k) == 5);
+
     return 0;
 }

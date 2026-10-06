@@ -1,29 +1,38 @@
-#include <iostream>
-#include <vector>
-#include <stack>
+#include <cassert>
 #include <climits>
+#include <iostream>
+#include <span>
+#include <stack>
+#include <vector>
 
-using namespace std;
-
-bool canRepresentBST(int pre[], int n) {
-    stack<int> s;
+bool canRepresentBST(std::span<const int> pre) {
+    std::stack<int> s;
     int root = INT_MIN;
 
-    for (int i = 0; i < n; i++) {
-        if (pre[i] < root) return false;
-        while (!s.empty() && s.top() < pre[i]) {
+    for (int val : pre) {
+        if (val < root) return false;
+        while (!s.empty() && s.top() < val) {
             root = s.top();
             s.pop();
         }
-        s.push(pre[i]);
+        s.push(val);
     }
     return true;
 }
 
 int main() {
-    int pre1[] = {40, 30, 35, 80, 100};
-    int pre2[] = {40, 30, 35, 20, 80, 100};
-    cout << "pre1 is valid BST: " << (canRepresentBST(pre1, 5) ? "Yes" : "No") << endl;
-    cout << "pre2 is valid BST: " << (canRepresentBST(pre2, 6) ? "Yes" : "No") << endl;
+    std::vector<int> pre1 = {40, 30, 35, 80, 100};
+    std::vector<int> pre2 = {40, 30, 35, 20, 80, 100};
+
+    assert(canRepresentBST(pre1));
+    assert(!canRepresentBST(pre2));
+
+    std::vector<int> single = {10};
+    assert(canRepresentBST(single));
+
+    std::vector<int> empty;
+    assert(canRepresentBST(empty));
+
+    std::cout << "7_bst 18_Check_preorder_valid_not: All tests passed.\n";
     return 0;
 }

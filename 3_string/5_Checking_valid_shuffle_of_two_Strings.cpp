@@ -1,22 +1,25 @@
+#include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <string>
-#include <algorithm>
+#include <string_view>
 
-using namespace std;
-
-bool validShuffle(string str1, string str2, string shuffle) {
+bool validShuffle(std::string_view str1, std::string_view str2, std::string_view shuffle) {
     if (str1.length() + str2.length() != shuffle.length()) return false;
-    sort(str1.begin(), str1.end());
-    sort(str2.begin(), str2.end());
-    sort(shuffle.begin(), shuffle.end());
+    std::string sortedShuffle(shuffle);
+    std::sort(sortedShuffle.begin(), sortedShuffle.end());
 
-    string combined = str1 + str2;
-    sort(combined.begin(), combined.end());
-    return combined == shuffle;
+    std::string combined = std::string(str1) + std::string(str2);
+    std::sort(combined.begin(), combined.end());
+    return combined == sortedShuffle;
 }
 
 int main() {
-    string s1 = "XY", s2 = "12", sh = "1X2Y";
-    cout << "Valid shuffle: " << (validShuffle(s1, s2, sh) ? "Yes" : "No") << endl;
+    assert(validShuffle("XY", "12", "1X2Y"));
+    assert(validShuffle("ABC", "123", "A1B2C3"));
+    assert(!validShuffle("XY", "12", "1X2Z"));
+    assert(!validShuffle("XY", "12", "1X2"));
+
+    std::cout << "3_string 5_Checking_valid_shuffle_of_two_Strings: All tests passed.\n";
     return 0;
 }

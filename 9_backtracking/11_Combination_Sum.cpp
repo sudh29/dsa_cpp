@@ -1,6 +1,8 @@
-#include <iostream>
-#include <vector>
 #include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <numeric>
+#include <vector>
 
 void solve(const std::vector<int>& arr, int target, std::vector<int>& current,
            size_t idx, std::vector<std::vector<int>>& result) {
@@ -34,11 +36,18 @@ int main() {
     std::vector<int> arr = {2, 4, 6, 8};
     int target = 8;
     auto combs = combinationalSum(arr, target);
-    std::cout << "Combinations summing to " << target << ":\n";
+    assert(!combs.empty());
     for (const auto& comb : combs) {
-        std::cout << "[ ";
-        for (int x : comb) std::cout << x << " ";
-        std::cout << "]\n";
+        int sum = 0;
+        for (int x : comb) sum += x;
+        assert(sum == target);
     }
+    std::vector<int> first = {2, 2, 2, 2};
+    assert(combs[0] == first);
+
+    std::vector<int> arr2 = {10};
+    assert(combinationalSum(arr2, 5).empty());
+
+    std::cout << "11_Combination_Sum tests passed.\n";
     return 0;
 }

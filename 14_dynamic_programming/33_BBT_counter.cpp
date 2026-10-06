@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -18,5 +19,8 @@ long long countBT(int h) {
 int main() {
     std::cout << "Balanced binary trees of height 2: " << countBT(2) << " (expected 3)\n";
     std::cout << "Balanced binary trees of height 3: " << countBT(3) << " (expected 15)\n";
+    assert(countBT(2) == 3);
+    assert(countBT(3) == 15);
+
     return 0;
 }

@@ -1,26 +1,25 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 class Solution {
 public:
-    string countAndSay(int n) {
+    std::string countAndSay(int n) {
         if (n <= 0) return "";
-        string res = "1";
-        for (int i = 1; i < n; i++) {
-            string next_res = "";
+        std::string res = "1";
+        for (int i = 1; i < n; ++i) {
+            std::string nextRes;
             int count = 1;
-            for (size_t j = 1; j < res.length(); j++) {
+            for (size_t j = 1; j < res.length(); ++j) {
                 if (res[j] == res[j - 1]) {
                     count++;
                 } else {
-                    next_res += to_string(count) + res[j - 1];
+                    nextRes += std::to_string(count) + res[j - 1];
                     count = 1;
                 }
             }
-            next_res += to_string(count) + res.back();
-            res = next_res;
+            nextRes += std::to_string(count) + res.back();
+            res = nextRes;
         }
         return res;
     }
@@ -28,6 +27,12 @@ public:
 
 int main() {
     Solution sol;
-    cout << "Count and Say (4): " << sol.countAndSay(4) << endl;
+    assert(sol.countAndSay(1) == "1");
+    assert(sol.countAndSay(2) == "11");
+    assert(sol.countAndSay(3) == "21");
+    assert(sol.countAndSay(4) == "1211");
+    assert(sol.countAndSay(5) == "111221");
+
+    std::cout << "3_string 6_Count_and_Say_problem: All tests passed.\n";
     return 0;
 }

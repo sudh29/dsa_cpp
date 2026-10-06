@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -26,5 +27,7 @@ int main() {
         {618, 420}
     };
     std::cout << "Max path sum: " << maximumPath(2, mat) << " (expected 1009)\n";
+    assert(maximumPath(2, mat) == 1009);
+
     return 0;
 }

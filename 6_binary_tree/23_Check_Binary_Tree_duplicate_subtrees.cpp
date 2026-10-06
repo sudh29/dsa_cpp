@@ -1,28 +1,37 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <unordered_map>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
-class Solution {
-public:
-    unordered_map<string, int> subtrees;
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
 
-    string serialize(Node* root) {
+class Solution {
+private:
+    std::unordered_map<std::string, int> subtrees;
+
+    std::string serialize(const Node* root) {
         if (!root) return "$";
-        string s = to_string(root->data) + "," + serialize(root->left) + "," + serialize(root->right);
-        if (root->left || root->right) subtrees[s]++;
+        std::string s = std::to_string(root->data) + "," + serialize(root->left) + "," + serialize(root->right);
+        if (root->left || root->right) {
+            subtrees[s]++;
+        }
         return s;
     }
 
-    int dupSub(Node *root) {
+public:
+    int dupSub(const Node *root) {
         subtrees.clear();
         serialize(root);
         for (const auto &[str, count] : subtrees) {
@@ -43,6 +52,11 @@ int main() {
     root->right->right->right = new Node(5);
 
     Solution sol;
-    cout << "Contains duplicate subtree (size >= 2): " << (sol.dupSub(root) ? "Yes" : "No") << endl;
+    // Subtree 2 with children 4 and 5 is duplicated
+    assert(sol.dupSub(root) == 1);
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 23_Check_Binary_Tree_duplicate_subtrees: All tests passed.\n";
     return 0;
 }

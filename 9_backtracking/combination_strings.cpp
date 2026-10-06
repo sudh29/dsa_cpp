@@ -1,6 +1,7 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 
 void allCombinationStr(const std::vector<std::string>& arr, const std::string& prefix, int k,
                        std::vector<std::string>& res) {
@@ -14,17 +15,19 @@ void allCombinationStr(const std::vector<std::string>& arr, const std::string& p
 }
 
 int main() {
-    std::cout << "First Test:\n";
     std::vector<std::string> set1 = {"1", "2", "3"};
     std::vector<std::string> res1;
     allCombinationStr(set1, "", 2, res1);
-    for (const auto& s : res1) std::cout << s << " ";
-    std::cout << "\n\nSecond Test:\n";
+    assert(res1.size() == 9);
+    assert(res1[0] == "11");
+    assert(res1[8] == "33");
 
     std::vector<std::string> set2 = {"a", "b", "c"};
     std::vector<std::string> res2;
     allCombinationStr(set2, "", 2, res2);
-    for (const auto& s : res2) std::cout << s << " ";
-    std::cout << "\n";
+    assert(res2.size() == 9);
+    assert(res2[0] == "aa");
+
+    std::cout << "combination_strings tests passed.\n";
     return 0;
 }

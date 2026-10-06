@@ -1,7 +1,9 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
-#include <unordered_map>
 #include <queue>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 // Definition for a Node.
 class Node {
@@ -37,6 +39,28 @@ Node* cloneGraph(Node* node) {
     return visited[node];
 }
 
+void freeGraph(Node* node) {
+    if (!node) return;
+    std::unordered_set<Node*> visited;
+    std::queue<Node*> q;
+    visited.insert(node);
+    q.push(node);
+    std::vector<Node*> all_nodes;
+    while (!q.empty()) {
+        Node* curr = q.front();
+        q.pop();
+        all_nodes.push_back(curr);
+        for (Node* nb : curr->neighbors) {
+            if (visited.insert(nb).second) {
+                q.push(nb);
+            }
+        }
+    }
+    for (Node* n : all_nodes) {
+        delete n;
+    }
+}
+
 int main() {
     Node* node1 = new Node(1);
     Node* node2 = new Node(2);
@@ -49,11 +73,18 @@ int main() {
     node4->neighbors = {node1, node3};
 
     Node* cloned = cloneGraph(node1);
-    std::cout << "Cloned graph node val: " << cloned->val << "\n";
-    std::cout << "Neighbors of cloned node 1: ";
-    for (Node* nb : cloned->neighbors) {
-        std::cout << nb->val << " ";
-    }
-    std::cout << "\n";
+    assert(cloned != nullptr);
+    assert(cloned != node1);
+    assert(cloned->val == 1);
+    assert(cloned->neighbors.size() == 2);
+    assert(cloned->neighbors[0]->val == 2);
+    assert(cloned->neighbors[1]->val == 4);
+
+    freeGraph(node1);
+    freeGraph(cloned);
+
+    assert(cloneGraph(nullptr) == nullptr);
+
+    std::cout << "9_Clone_a_graph tests passed.\n";
     return 0;
 }

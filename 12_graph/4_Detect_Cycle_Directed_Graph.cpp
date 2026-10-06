@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -37,12 +38,15 @@ int main() {
     adj[1].push_back(2);
     adj[2].push_back(3);
     adj[3].push_back(1); // Cycle: 1->2->3->1
-
-    std::cout << "Directed graph contains cycle: " << (isCyclic(V, adj) ? "YES" : "NO") << "\n";
+    assert(isCyclic(V, adj) == true);
 
     std::vector<std::vector<int>> acyclicAdj(3);
     acyclicAdj[0].push_back(1);
     acyclicAdj[1].push_back(2);
-    std::cout << "Acyclic graph contains cycle: " << (isCyclic(3, acyclicAdj) ? "YES" : "NO") << "\n";
+    assert(isCyclic(3, acyclicAdj) == false);
+
+    assert(isCyclic(0, {}) == false);
+
+    std::cout << "4_Detect_Cycle_Directed_Graph tests passed.\n";
     return 0;
 }

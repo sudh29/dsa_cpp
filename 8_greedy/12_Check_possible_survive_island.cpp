@@ -1,6 +1,5 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
 
 class Solution {
 public:
@@ -15,6 +14,11 @@ public:
 
 int main() {
     Solution sol;
-    cout << "Min days to survive (S=10, N=16, M=2): " << sol.minimumDays(10, 16, 2) << endl;
+    assert(sol.minimumDays(10, 16, 2) == 2);
+    assert(sol.minimumDays(10, 2, 2) == -1);
+    assert(sol.minimumDays(1, 1, 1) == 1);
+    assert(sol.minimumDays(2, 5, 2) == 1);
+
+    std::cout << "12_Check_possible_survive_island tests passed.\n";
     return 0;
 }

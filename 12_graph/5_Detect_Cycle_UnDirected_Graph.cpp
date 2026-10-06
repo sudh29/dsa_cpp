@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -35,12 +36,16 @@ int main() {
     adj[3] = {2, 4};
     adj[4] = {3};
 
-    std::cout << "Undirected graph has cycle: " << (isCycle(V, adj) ? "YES" : "NO") << "\n";
+    assert(isCycle(V, adj) == true);
 
     std::vector<std::vector<int>> treeAdj(3);
     treeAdj[0] = {1};
     treeAdj[1] = {0, 2};
     treeAdj[2] = {1};
-    std::cout << "Undirected tree has cycle: " << (isCycle(3, treeAdj) ? "YES" : "NO") << "\n";
+    assert(isCycle(3, treeAdj) == false);
+
+    assert(isCycle(0, {}) == false);
+
+    std::cout << "5_Detect_Cycle_UnDirected_Graph tests passed.\n";
     return 0;
 }

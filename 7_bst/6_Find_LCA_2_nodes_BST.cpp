@@ -1,13 +1,19 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
+
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
 
 Node* LCA(Node* root, int n1, int n2) {
     if (!root) return nullptr;
@@ -23,7 +29,17 @@ int main() {
     root->left->left = new Node(4);
     root->left->right = new Node(12);
 
-    Node* lca = LCA(root, 4, 12);
-    cout << "LCA of 4 and 12: " << (lca ? lca->data : -1) << endl; // 8
+    Node* lca1 = LCA(root, 4, 12);
+    assert(lca1 != nullptr && lca1->data == 8);
+
+    Node* lca2 = LCA(root, 4, 22);
+    assert(lca2 != nullptr && lca2->data == 20);
+
+    Node* lca3 = LCA(root, 8, 12);
+    assert(lca3 != nullptr && lca3->data == 8);
+
+    freeTree(root);
+
+    std::cout << "7_bst 6_Find_LCA_2_nodes_BST: All tests passed.\n";
     return 0;
 }

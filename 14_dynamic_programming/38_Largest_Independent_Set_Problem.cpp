@@ -1,5 +1,6 @@
-#include <iostream>
 #include <algorithm>
+#include <cassert>
+#include <iostream>
 #include <unordered_map>
 
 struct Node {
@@ -8,6 +9,13 @@ struct Node {
     Node* right;
     Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
+
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
 
 std::unordered_map<Node*, int> memo;
 
@@ -40,6 +48,9 @@ int main() {
     root->right = new Node(22);
     root->right->right = new Node(25);
 
-    std::cout << "Size of Largest Independent Set: " << LISS(root) << " (expected 5)\n";
+    assert(LISS(root) == 5);
+    freeTree(root);
+
+    std::cout << "38_Largest_Independent_Set_Problem tests passed.\n";
     return 0;
 }

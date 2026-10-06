@@ -1,21 +1,23 @@
-#include <iostream>
 #include <algorithm>
-
-using namespace std;
+#include <cassert>
+#include <iostream>
+#include <span>
+#include <vector>
 
 class Solution {
 public:
-    int minJumps(int arr[], int n) {
+    int minJumps(std::span<const int> arr) {
+        size_t n = arr.size();
         if (n <= 1) return 0;
         if (arr[0] == 0) return -1;
 
-        int maxReach = arr[0];
-        int step = arr[0];
+        size_t maxReach = arr[0];
+        size_t step = arr[0];
         int jump = 1;
 
-        for (int i = 1; i < n; i++) {
+        for (size_t i = 1; i < n; ++i) {
             if (i == n - 1) return jump;
-            maxReach = max(maxReach, i + arr[i]);
+            maxReach = std::max(maxReach, i + static_cast<size_t>(arr[i]));
             step--;
 
             if (step == 0) {
@@ -30,8 +32,15 @@ public:
 
 int main() {
     Solution sol;
-    int arr[] = {1, 3, 5, 8, 9, 2, 6, 7, 6, 8, 9};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    cout << "Min jumps to reach end: " << sol.minJumps(arr, n) << endl;
+    std::vector<int> arr1 = {1, 3, 5, 8, 9, 2, 6, 7, 6, 8, 9};
+    assert(sol.minJumps(arr1) == 3);
+
+    std::vector<int> arr2 = {1, 4, 3, 2, 6, 7};
+    assert(sol.minJumps(arr2) == 2);
+
+    std::vector<int> arr3 = {0, 1, 2};
+    assert(sol.minJumps(arr3) == -1);
+
+    std::cout << "1_array 9_Minimum_number_of_jumps: All tests passed.\n";
     return 0;
 }

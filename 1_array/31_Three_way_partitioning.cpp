@@ -1,18 +1,21 @@
-#include <iostream>
-#include <vector>
 #include <algorithm>
-
-using namespace std;
+#include <cassert>
+#include <iostream>
+#include <span>
+#include <vector>
 
 class Solution {
 public:
-    void threeWayPartition(vector<int>& array, int a, int b) {
-        int low = 0, mid = 0, high = (int)array.size() - 1;
+    void threeWayPartition(std::span<int> array, int a, int b) {
+        int low = 0;
+        int mid = 0;
+        int high = static_cast<int>(array.size()) - 1;
+
         while (mid <= high) {
             if (array[mid] < a) {
-                swap(array[low++], array[mid++]);
+                std::swap(array[low++], array[mid++]);
             } else if (array[mid] > b) {
-                swap(array[mid], array[high--]);
+                std::swap(array[mid], array[high--]);
             } else {
                 mid++;
             }
@@ -22,10 +25,23 @@ public:
 
 int main() {
     Solution sol;
-    vector<int> arr = {1, 14, 5, 20, 4, 2, 54, 20, 87, 98, 3, 1, 32};
-    sol.threeWayPartition(arr, 10, 20);
-    cout << "Three-way partitioned around [10, 20]: ";
-    for (int v : arr) cout << v << " ";
-    cout << endl;
+    std::vector<int> arr = {1, 14, 5, 20, 4, 2, 54, 20, 87, 98, 3, 1, 32};
+    int a = 10, b = 20;
+    sol.threeWayPartition(arr, a, b);
+
+    // Verify partitioning: elements < a come first, then in [a, b], then > b
+    int state = 0; // 0: < a, 1: in [a, b], 2: > b
+    for (int v : arr) {
+        if (v < a) {
+            assert(state == 0);
+        } else if (v <= b) {
+            if (state == 0) state = 1;
+            assert(state <= 1);
+        } else {
+            state = 2;
+        }
+    }
+
+    std::cout << "1_array 31_Three_way_partitioning: All tests passed.\n";
     return 0;
 }

@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -26,5 +27,7 @@ int main() {
     std::string s1 = "AGGTAB";
     std::string s2 = "GXTXAYB";
     std::cout << "Space-optimized LCS: " << lcsSpaceOptimized(s1, s2) << " (expected 4)\n";
+    assert(lcsSpaceOptimized(s1, s2) == 4);
+
     return 0;
 }

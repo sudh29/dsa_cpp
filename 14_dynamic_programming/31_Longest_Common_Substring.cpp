@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -26,5 +27,7 @@ int main() {
     std::string s1 = "ABCDGH";
     std::string s2 = "ACDGHR";
     std::cout << "Longest common substring: " << longestCommonSubstr(s1, s2) << " (expected 4)\n";
+    assert(longestCommonSubstr(s1, s2) == 4);
+
     return 0;
 }

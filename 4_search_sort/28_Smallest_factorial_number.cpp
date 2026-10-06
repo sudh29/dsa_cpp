@@ -1,6 +1,5 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
 
 class Solution {
 public:
@@ -30,7 +29,11 @@ public:
 
 int main() {
     Solution sol;
-    int n = 6;
-    cout << "Smallest number whose factorial has at least " << n << " trailing zeros: " << sol.findNum(n) << endl;
+    assert(sol.findNum(1) == 5);
+    assert(sol.findNum(6) == 25);
+    assert(sol.findNum(2) == 10);
+    assert(sol.findNum(3) == 15);
+
+    std::cout << "28_Smallest_factorial_number tests passed.\n";
     return 0;
 }

@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -30,5 +31,7 @@ int maxProfit(int n, const std::vector<int>& price) {
 int main() {
     std::vector<int> prices = {10, 22, 5, 75, 65, 80};
     std::cout << "Max profit at most twice: " << maxProfit(prices.size(), prices) << " (expected 87)\n";
+    assert(maxProfit(prices.size(), prices) == 87);
+
     return 0;
 }

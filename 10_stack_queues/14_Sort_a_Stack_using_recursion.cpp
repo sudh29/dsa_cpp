@@ -1,9 +1,9 @@
+#include <cassert>
 #include <iostream>
 #include <stack>
+#include <vector>
 
-using namespace std;
-
-void sortedInsert(stack<int> &s, int element) {
+void sortedInsert(std::stack<int> &s, int element) {
     if (s.empty() || element > s.top()) {
         s.push(element);
         return;
@@ -14,7 +14,7 @@ void sortedInsert(stack<int> &s, int element) {
     s.push(temp);
 }
 
-void sortStack(stack<int> &s) {
+void sortStack(std::stack<int> &s) {
     if (!s.empty()) {
         int temp = s.top();
         s.pop();
@@ -24,7 +24,7 @@ void sortStack(stack<int> &s) {
 }
 
 int main() {
-    stack<int> s;
+    std::stack<int> s;
     s.push(30);
     s.push(-5);
     s.push(18);
@@ -32,11 +32,16 @@ int main() {
     s.push(-3);
 
     sortStack(s);
-    cout << "Sorted stack (top to bottom): ";
+
+    std::vector<int> popped;
     while (!s.empty()) {
-        cout << s.top() << " ";
+        popped.push_back(s.top());
         s.pop();
     }
-    cout << endl;
+    // Top of sorted stack should be maximum (30, 18, 14, -3, -5)
+    std::vector<int> expected = {30, 18, 14, -3, -5};
+    assert(popped == expected);
+
+    std::cout << "10_stack_queues 14_Sort_a_Stack_using_recursion: All tests passed.\n";
     return 0;
 }

@@ -1,19 +1,18 @@
-#include <iostream>
-#include <vector>
 #include <cassert>
-
-using namespace std;
+#include <iostream>
+#include <span>
+#include <vector>
 
 class Solution {
 public:
-    void rearrange(int arr[], int n) {
-        vector<int> pos, neg;
-        for (int i = 0; i < n; i++) {
-            if (arr[i] >= 0) pos.push_back(arr[i]);
-            else neg.push_back(arr[i]);
+    void rearrange(std::span<int> arr) {
+        std::vector<int> pos, neg;
+        for (int val : arr) {
+            if (val >= 0) pos.push_back(val);
+            else neg.push_back(val);
         }
 
-        int i = 0;
+        size_t i = 0;
         size_t p = 0, q = 0;
         while (p < pos.size() && q < neg.size()) {
             arr[i++] = pos[p++];
@@ -26,12 +25,15 @@ public:
 
 int main() {
     Solution sol;
-    int arr[] = {9, 4, -2, -1, 5, 0, -5, -3, 2};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    sol.rearrange(arr, n);
-    cout << "Alternating pos/neg: ";
-    for (int i = 0; i < n; i++) cout << arr[i] << " ";
-    cout << endl;
-    assert(arr[0] == 9 && arr[1] == -2 && arr[2] == 4 && arr[3] == -1);
+    std::vector<int> arr = {9, 4, -2, -1, 5, 0, -5, -3, 2};
+    sol.rearrange(arr);
+    std::vector<int> expected = {9, -2, 4, -1, 5, -5, 0, -3, 2};
+    assert(arr == expected);
+
+    std::vector<int> allPos = {1, 2, 3};
+    sol.rearrange(allPos);
+    assert(allPos == (std::vector<int>{1, 2, 3}));
+
+    std::cout << "1_array 19_Alternate_positive_and_negative_numbers: All tests passed.\n";
     return 0;
 }

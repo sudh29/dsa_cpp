@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -17,19 +18,23 @@ std::string smallestNumber(int S, int D) {
             ans[i] = '9';
             S -= 9;
         } else {
-            ans[i] = '0' + S;
+            ans[i] = static_cast<char>('0' + S);
             S = 0;
         }
     }
     // Most significant digit gets remaining S + 1
-    ans[0] = '1' + S;
+    ans[0] = static_cast<char>('1' + S);
 
     return std::string(ans.begin(), ans.end());
 }
 
 int main() {
-    std::cout << "Smallest number (S=9, D=2): " << smallestNumber(9, 2) << " (expected 18)\n";
-    std::cout << "Smallest number (S=20, D=3): " << smallestNumber(20, 3) << " (expected 299)\n";
-    std::cout << "Smallest number (S=25, D=2): " << smallestNumber(25, 2) << " (expected -1)\n";
+    assert(smallestNumber(9, 2) == "18");
+    assert(smallestNumber(20, 3) == "299");
+    assert(smallestNumber(25, 2) == "-1");
+    assert(smallestNumber(0, 1) == "0");
+    assert(smallestNumber(1, 1) == "1");
+
+    std::cout << "32_Find_smallest_number_given_number_digits_sum_digits tests passed.\n";
     return 0;
 }

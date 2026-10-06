@@ -1,13 +1,12 @@
+#include <cassert>
 #include <iostream>
-#include <string>
 #include <stack>
-
-using namespace std;
+#include <string_view>
 
 class Solution {
 public:
-    bool ispar(string x) {
-        stack<char> s;
+    bool ispar(std::string_view x) {
+        std::stack<char> s;
         for (char c : x) {
             if (c == '(' || c == '{' || c == '[') {
                 s.push(c);
@@ -29,7 +28,14 @@ public:
 
 int main() {
     Solution sol;
-    string s = "{([])}";
-    cout << s << " is balanced: " << (sol.ispar(s) ? "Yes" : "No") << endl;
+    assert(sol.ispar("{([])}"));
+    assert(sol.ispar("()"));
+    assert(sol.ispar("()[]{}"));
+    assert(!sol.ispar("([)]"));
+    assert(!sol.ispar("]"));
+    assert(!sol.ispar("((("));
+    assert(sol.ispar(""));
+
+    std::cout << "15_Balanced_Parenthesis_problem_Imp tests passed.\n";
     return 0;
 }

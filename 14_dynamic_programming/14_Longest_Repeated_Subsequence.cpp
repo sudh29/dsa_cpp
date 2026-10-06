@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -21,6 +22,11 @@ int longestRepeatedSubsequence(const std::string& str) {
 
 int main() {
     std::string s = "axxxxy";
-    std::cout << "LRS length of 'axxxxy': " << longestRepeatedSubsequence(s) << " (expected 2)\n";
+    assert(longestRepeatedSubsequence(s) == 3);
+    assert(longestRepeatedSubsequence("AABEBCDD") == 3);
+    assert(longestRepeatedSubsequence("abcd") == 0);
+    assert(longestRepeatedSubsequence("aab") == 1);
+
+    std::cout << "All Longest Repeated Subsequence tests passed!\n";
     return 0;
 }

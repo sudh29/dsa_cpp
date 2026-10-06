@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -36,5 +37,7 @@ int main() {
     std::vector<Job> jobs = {{1, 4, 20}, {2, 1, 10}, {3, 1, 40}, {4, 1, 30}};
     auto [cnt, profit] = JobScheduling(jobs, jobs.size());
     std::cout << "Scheduled jobs: " << cnt << ", Total profit: " << profit << " (expected 2, 60)\n";
+    assert(cnt == 2 && profit == 60);
+
     return 0;
 }

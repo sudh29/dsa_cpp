@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -19,13 +20,14 @@ int main() {
     };
 
     auto adj = printGraph(V, edges);
-    std::cout << "Adjacency List Representation:\n";
-    for (int i = 0; i < V; ++i) {
-        std::cout << i << ": ";
-        for (int neighbor : adj[i]) {
-            std::cout << neighbor << " ";
-        }
-        std::cout << "\n";
-    }
+    assert(adj.size() == 5);
+    std::vector<int> expected0 = {1, 4};
+    std::vector<int> expected1 = {0, 2, 3, 4};
+    assert(adj[0] == expected0);
+    assert(adj[1] == expected1);
+
+    assert(printGraph(0, {}).empty());
+
+    std::cout << "1_Create_Graph tests passed.\n";
     return 0;
 }

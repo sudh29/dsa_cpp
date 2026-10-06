@@ -1,25 +1,32 @@
-#include <iostream>
+#include <cassert>
 #include <climits>
-
-using namespace std;
+#include <iostream>
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 class Solution {
-public:
-    bool isBSTUtil(Node* root, long long minVal, long long maxVal) {
+private:
+    bool isBSTUtil(const Node* root, long long minVal, long long maxVal) const {
         if (!root) return true;
         if (root->data <= minVal || root->data >= maxVal) return false;
         return isBSTUtil(root->left, minVal, root->data) &&
                isBSTUtil(root->right, root->data, maxVal);
     }
 
-    bool isBST(Node* root) {
+public:
+    bool isBST(const Node* root) const {
         return isBSTUtil(root, LLONG_MIN, LLONG_MAX);
     }
 };
@@ -30,6 +37,14 @@ int main() {
     root->right = new Node(3);
 
     Solution sol;
-    cout << "Is valid BST: " << (sol.isBST(root) ? "Yes" : "No") << endl;
+    assert(sol.isBST(root));
+
+    // Invalidate BST
+    root->left->data = 5;
+    assert(!sol.isBST(root));
+
+    freeTree(root);
+
+    std::cout << "7_bst 4_Check_if_tree_BST_or_not: All tests passed.\n";
     return 0;
 }

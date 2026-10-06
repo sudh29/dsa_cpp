@@ -1,31 +1,39 @@
-#include <iostream>
 #include <algorithm>
-
-using namespace std;
+#include <cassert>
+#include <iostream>
+#include <utility>
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 class Solution {
-public:
+private:
     // returns {including_root, excluding_root}
-    pair<int, int> dfs(Node* root) {
+    std::pair<int, int> dfs(const Node* root) const {
         if (!root) return {0, 0};
         auto l = dfs(root->left);
         auto r = dfs(root->right);
 
         int incl = root->data + l.second + r.second;
-        int excl = max(l.first, l.second) + max(r.first, r.second);
+        int excl = std::max(l.first, l.second) + std::max(r.first, r.second);
         return {incl, excl};
     }
 
-    int getMaxSum(Node *root) {
+public:
+    int getMaxSum(const Node *root) const {
         auto res = dfs(root);
-        return max(res.first, res.second);
+        return std::max(res.first, res.second);
     }
 };
 
@@ -38,6 +46,12 @@ int main() {
     root->right->right = new Node(5);
 
     Solution sol;
-    cout << "Max sum without adjacent nodes: " << sol.getMaxSum(root) << endl;
+    // Optimal: choose nodes 1, 4, 5 (from bottom) and root 1 = 1 + 1 + 4 + 5 = 11
+    assert(sol.getMaxSum(root) == 11);
+    assert(sol.getMaxSum(nullptr) == 0);
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 28_Maximum_Sum_nodes_Binary_tree_adjacent: All tests passed.\n";
     return 0;
 }

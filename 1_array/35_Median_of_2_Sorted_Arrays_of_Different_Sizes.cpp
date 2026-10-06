@@ -1,17 +1,22 @@
-#include <iostream>
-#include <vector>
 #include <algorithm>
+#include <cassert>
+#include <cmath>
 #include <climits>
-
-using namespace std;
+#include <iostream>
+#include <span>
+#include <vector>
 
 class Solution {
 public:
-    double MedianOfArrays(vector<int>& array1, vector<int>& array2) {
-        if (array1.size() > array2.size()) return MedianOfArrays(array2, array1);
+    double medianOfArrays(std::span<const int> array1, std::span<const int> array2) {
+        if (array1.size() > array2.size()) {
+            return medianOfArrays(array2, array1);
+        }
 
-        int n1 = array1.size(), n2 = array2.size();
-        int low = 0, high = n1;
+        int n1 = static_cast<int>(array1.size());
+        int n2 = static_cast<int>(array2.size());
+        int low = 0;
+        int high = n1;
 
         while (low <= high) {
             int cut1 = (low + high) >> 1;
@@ -25,9 +30,9 @@ public:
 
             if (left1 <= right2 && left2 <= right1) {
                 if ((n1 + n2) % 2 == 0) {
-                    return (max(left1, left2) + min(right1, right2)) / 2.0;
+                    return (std::max(left1, left2) + std::min(right1, right2)) / 2.0;
                 } else {
-                    return max(left1, left2);
+                    return std::max(left1, left2);
                 }
             } else if (left1 > right2) {
                 high = cut1 - 1;
@@ -41,8 +46,16 @@ public:
 
 int main() {
     Solution sol;
-    vector<int> a1 = {1, 5, 9};
-    vector<int> a2 = {2, 3, 6, 7};
-    cout << "Median of two sorted arrays: " << sol.MedianOfArrays(a1, a2) << endl;
+    std::vector<int> a1 = {1, 5, 9};
+    std::vector<int> a2 = {2, 3, 6, 7};
+    // Merged: 1, 2, 3, 5, 6, 7, 9 (odd length 7, median is 5)
+    assert(std::abs(sol.medianOfArrays(a1, a2) - 5.0) < 1e-6);
+
+    std::vector<int> b1 = {4, 6};
+    std::vector<int> b2 = {1, 2, 3, 5};
+    // Merged: 1, 2, 3, 4, 5, 6 (even length 6, median is (3 + 4) / 2 = 3.5)
+    assert(std::abs(sol.medianOfArrays(b1, b2) - 3.5) < 1e-6);
+
+    std::cout << "1_array 35_Median_of_2_Sorted_Arrays_of_Different_Sizes: All tests passed.\n";
     return 0;
 }

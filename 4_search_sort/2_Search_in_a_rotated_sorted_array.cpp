@@ -1,12 +1,12 @@
+#include <cassert>
 #include <iostream>
+#include <span>
 #include <vector>
-
-using namespace std;
 
 class Solution {
 public:
-    int search(vector<int>& nums, int target) {
-        int start = 0, end = (int)nums.size() - 1;
+    int search(std::span<const int> nums, int target) {
+        int start = 0, end = static_cast<int>(nums.size()) - 1;
         while (start <= end) {
             int mid = start + (end - start) / 2;
             if (nums[mid] == target) return mid;
@@ -31,8 +31,17 @@ public:
 
 int main() {
     Solution sol;
-    vector<int> nums = {4, 5, 6, 7, 0, 1, 2};
-    int target = 0;
-    cout << "Index of " << target << " in rotated array: " << sol.search(nums, target) << endl;
+    std::vector<int> nums = {4, 5, 6, 7, 0, 1, 2};
+    assert(sol.search(nums, 0) == 4);
+    assert(sol.search(nums, 3) == -1);
+    assert(sol.search(nums, 4) == 0);
+    assert(sol.search(nums, 2) == 6);
+
+    std::vector<int> single = {1};
+    assert(sol.search(single, 1) == 0);
+    assert(sol.search(single, 0) == -1);
+    assert(sol.search({}, 5) == -1);
+
+    std::cout << "2_Search_in_a_rotated_sorted_array tests passed.\n";
     return 0;
 }

@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -43,13 +44,15 @@ std::vector<std::vector<int>> nQueen(int n) {
 }
 
 int main() {
-    int n = 4;
-    auto solutions = nQueen(n);
-    std::cout << "N-Queens (n=4) solutions count: " << solutions.size() << "\n";
-    for (const auto& sol : solutions) {
-        std::cout << "[ ";
-        for (int row : sol) std::cout << row << " ";
-        std::cout << "]\n";
-    }
+    auto sol4 = nQueen(4);
+    assert(sol4.size() == 2);
+    assert(sol4[0] == (std::vector<int>{2, 4, 1, 3}));
+    assert(sol4[1] == (std::vector<int>{3, 1, 4, 2}));
+
+    assert(nQueen(1).size() == 1);
+    assert(nQueen(2).empty());
+    assert(nQueen(3).empty());
+
+    std::cout << "1_Printing_all_solutions_N-Queen_Problem tests passed.\n";
     return 0;
 }

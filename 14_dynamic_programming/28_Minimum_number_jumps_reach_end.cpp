@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -24,5 +25,7 @@ int minJumps(const std::vector<int>& arr, int n) {
 int main() {
     std::vector<int> arr = {1, 3, 5, 8, 9, 2, 6, 7, 6, 8, 9};
     std::cout << "Min jumps: " << minJumps(arr, arr.size()) << " (expected 3)\n";
+    assert(minJumps(arr, arr.size()) == 3);
+
     return 0;
 }

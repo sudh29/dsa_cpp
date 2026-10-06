@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -31,5 +32,7 @@ int main() {
         {0, 0, 0, 0, 0}
     };
     std::cout << "Max square side with all 1s: " << maxSquare(mat.size(), mat[0].size(), mat) << " (expected 3)\n";
+    assert(maxSquare(mat.size(), mat[0].size(), mat) == 3);
+
     return 0;
 }

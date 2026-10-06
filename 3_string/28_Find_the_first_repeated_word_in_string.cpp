@@ -1,14 +1,13 @@
+#include <cassert>
 #include <iostream>
-#include <string>
 #include <sstream>
+#include <string>
 #include <unordered_set>
 
-using namespace std;
-
-string firstRepeat(const string &s) {
-    unordered_set<string> seen;
-    stringstream ss(s);
-    string word;
+std::string firstRepeat(const std::string& s) {
+    std::unordered_set<std::string> seen;
+    std::stringstream ss(s);
+    std::string word;
     while (ss >> word) {
         if (seen.find(word) != seen.end()) return word;
         seen.insert(word);
@@ -17,7 +16,17 @@ string firstRepeat(const string &s) {
 }
 
 int main() {
-    string str = "Ravi had been saying that he would like to visit the alpine resort but Ravi forgot";
-    cout << "First repeated word: " << firstRepeat(str) << endl;
+    std::string str1 = "Ravi had been saying that he would like to visit the alpine resort but Ravi forgot";
+    assert(firstRepeat(str1) == "Ravi");
+
+    std::string str2 = "he had had he";
+    assert(firstRepeat(str2) == "had");
+
+    std::string str3 = "no repetition here at all";
+    assert(firstRepeat(str3) == "NoRepetition");
+
+    assert(firstRepeat("") == "NoRepetition");
+
+    std::cout << "28_Find_the_first_repeated_word_in_string tests passed.\n";
     return 0;
 }

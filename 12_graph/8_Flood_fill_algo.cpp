@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -16,6 +17,7 @@ void dfs(std::vector<std::vector<int>>& image, int r, int c, int oldColor, int n
 }
 
 std::vector<std::vector<int>> floodFill(std::vector<std::vector<int>>& image, int sr, int sc, int newColor) {
+    if (image.empty() || image[0].empty()) return image;
     int oldColor = image[sr][sc];
     if (oldColor != newColor) {
         dfs(image, sr, sc, oldColor, newColor);
@@ -31,13 +33,16 @@ int main() {
     };
     int sr = 1, sc = 1, newColor = 2;
     auto result = floodFill(image, sr, sc, newColor);
+    std::vector<std::vector<int>> expected = {
+        {2, 2, 2},
+        {2, 2, 0},
+        {2, 0, 1}
+    };
+    assert(result == expected);
 
-    std::cout << "Flood Fill result:\n";
-    for (const auto& row : result) {
-        for (int pixel : row) {
-            std::cout << pixel << " ";
-        }
-        std::cout << "\n";
-    }
+    std::vector<std::vector<int>> empty;
+    assert(floodFill(empty, 0, 0, 1).empty());
+
+    std::cout << "8_Flood_fill_algo tests passed.\n";
     return 0;
 }

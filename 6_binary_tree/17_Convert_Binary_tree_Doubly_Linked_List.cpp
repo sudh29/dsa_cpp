@@ -1,16 +1,16 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
+#include <vector>
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
 class Solution {
-public:
+private:
     void bToDLLUtil(Node* root, Node*& head, Node*& prev) {
         if (!root) return;
         bToDLLUtil(root->left, head, prev);
@@ -24,8 +24,10 @@ public:
         bToDLLUtil(root->right, head, prev);
     }
 
-    Node *bToDLL(Node *root) {
-        Node *head = nullptr, *prev = nullptr;
+public:
+    Node* bToDLL(Node *root) {
+        Node* head = nullptr;
+        Node* prev = nullptr;
         bToDLLUtil(root, head, prev);
         return head;
     }
@@ -40,8 +42,24 @@ int main() {
 
     Solution sol;
     Node* dll = sol.bToDLL(root);
-    cout << "Binary tree to DLL: ";
-    while (dll) { cout << dll->data << " "; dll = dll->right; }
-    cout << endl;
+
+    std::vector<int> vals;
+    Node* cur = dll;
+    while (cur) {
+        vals.push_back(cur->data);
+        cur = cur->right;
+    }
+    // Inorder: 25, 12, 30, 10, 15
+    std::vector<int> expected = {25, 12, 30, 10, 15};
+    assert(vals == expected);
+
+    // Free all nodes in the DLL
+    while (dll) {
+        Node* tmp = dll;
+        dll = dll->right;
+        delete tmp;
+    }
+
+    std::cout << "6_binary_tree 17_Convert_Binary_tree_Doubly_Linked_List: All tests passed.\n";
     return 0;
 }

@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -36,5 +37,7 @@ int main() {
         {-4, -1, 1, 7, -6}
     };
     std::cout << "Max sum rectangle: " << maximumSumRectangle(4, 5, mat) << " (expected 29)\n";
+    assert(maximumSumRectangle(4, 5, mat) == 29);
+
     return 0;
 }

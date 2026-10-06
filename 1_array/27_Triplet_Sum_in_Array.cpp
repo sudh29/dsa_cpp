@@ -1,14 +1,20 @@
-#include <iostream>
 #include <algorithm>
-
-using namespace std;
+#include <cassert>
+#include <iostream>
+#include <span>
+#include <vector>
 
 class Solution {
 public:
-    bool find3Numbers(int A[], int n, int X) {
-        sort(A, A + n);
-        for (int i = 0; i < n - 2; i++) {
-            int l = i + 1, r = n - 1;
+    bool find3Numbers(std::span<const int> arr, int X) {
+        if (arr.size() < 3) return false;
+        std::vector<int> A(arr.begin(), arr.end());
+        std::sort(A.begin(), A.end());
+
+        int n = static_cast<int>(A.size());
+        for (int i = 0; i < n - 2; ++i) {
+            int l = i + 1;
+            int r = n - 1;
             while (l < r) {
                 int sum = A[i] + A[l] + A[r];
                 if (sum == X) return true;
@@ -22,9 +28,13 @@ public:
 
 int main() {
     Solution sol;
-    int A[] = {1, 4, 45, 6, 10, 8};
-    int n = sizeof(A) / sizeof(A[0]);
-    int x = 13;
-    cout << "Triplet sum equal to " << x << ": " << (sol.find3Numbers(A, n, x) ? "Found" : "Not Found") << endl;
+    std::vector<int> A1 = {1, 4, 45, 6, 10, 8};
+    assert(sol.find3Numbers(A1, 13)); // 1 + 4 + 8 = 13
+
+    std::vector<int> A2 = {1, 2, 4, 3, 6};
+    assert(sol.find3Numbers(A2, 10)); // 1 + 3 + 6 = 10
+    assert(!sol.find3Numbers(A2, 100));
+
+    std::cout << "1_array 27_Triplet_Sum_in_Array: All tests passed.\n";
     return 0;
 }

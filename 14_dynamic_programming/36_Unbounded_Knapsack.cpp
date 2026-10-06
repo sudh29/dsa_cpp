@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -18,5 +19,7 @@ int main() {
     std::vector<int> wt = {1, 3, 4, 5};
     int W = 8;
     std::cout << "Unbounded knapsack max val: " << knapSackUnbounded(val.size(), W, val, wt) << " (expected 11)\n";
+    assert(knapSackUnbounded(val.size(), W, val, wt) == 11);
+
     return 0;
 }

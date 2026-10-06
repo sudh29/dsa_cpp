@@ -8,6 +8,7 @@ CXXFLAGS="-std=c++20 -Wall -Wextra -O2"
 
 JOBS="${JOBS:-$(nproc 2>/dev/null || echo 4)}"
 STRICT=0
+SANITIZE=0
 MODULES=()
 
 # Parse CLI arguments
@@ -22,12 +23,18 @@ while [[ $# -gt 0 ]]; do
             CXXFLAGS="${CXXFLAGS} -Werror"
             shift
             ;;
+        -s|--sanitize)
+            SANITIZE=1
+            CXXFLAGS="${CXXFLAGS} -fsanitize=address,undefined -fno-omit-frame-pointer"
+            shift
+            ;;
         -h|--help)
-            echo "Usage: $0 [-j JOBS] [--strict] [MODULE_OR_FILE ...]"
+            echo "Usage: $0 [-j JOBS] [--strict] [-s|--sanitize] [MODULE_OR_FILE ...]"
             echo "Options:"
-            echo "  -j, --jobs N   Number of parallel jobs (default: $(nproc 2>/dev/null || echo 4))"
-            echo "  --strict       Treat warnings as errors (-Werror)"
-            echo "  -h, --help     Show this help message"
+            echo "  -j, --jobs N     Number of parallel jobs (default: $(nproc 2>/dev/null || echo 4))"
+            echo "  --strict         Treat warnings as errors (-Werror)"
+            echo "  -s, --sanitize   Enable AddressSanitizer and UB Sanitizer"
+            echo "  -h, --help       Show this help message"
             exit 0
             ;;
         *)
@@ -75,6 +82,9 @@ echo " Root:        ${REPO_ROOT}"
 echo " Parallelism: ${JOBS} concurrent jobs"
 if [ ${STRICT} -eq 1 ]; then
     echo " Strict Mode: Enabled (-Werror)"
+fi
+if [ ${SANITIZE} -eq 1 ]; then
+    echo " Sanitizers:  Enabled (-fsanitize=address,undefined)"
 fi
 echo "=========================================================="
 

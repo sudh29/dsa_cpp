@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -23,5 +24,7 @@ int findLongestChain(std::vector<std::vector<int>>& pairs) {
 int main() {
     std::vector<std::vector<int>> pairs = {{1, 2}, {2, 3}, {3, 4}};
     std::cout << "Longest pair chain: " << findLongestChain(pairs) << " (expected 2)\n";
+    assert(findLongestChain(pairs) == 2);
+
     return 0;
 }

@@ -1,19 +1,19 @@
+#include <cassert>
 #include <iostream>
 #include <string>
+#include <utility>
 #include <vector>
-
-using namespace std;
 
 class Solution {
 public:
-    int minimumNumberOfSwaps(string S) {
-        vector<int> pos;
-        for (int i = 0; i < (int)S.length(); i++) {
+    int minimumNumberOfSwaps(std::string S) {
+        std::vector<int> pos;
+        for (int i = 0; i < static_cast<int>(S.length()); i++) {
             if (S[i] == '[') pos.push_back(i);
         }
 
         int count = 0, p = 0, swaps = 0;
-        for (int i = 0; i < (int)S.length(); i++) {
+        for (int i = 0; i < static_cast<int>(S.length()); i++) {
             if (S[i] == '[') {
                 count++;
                 p++;
@@ -23,7 +23,7 @@ public:
 
             if (count < 0) {
                 swaps += (pos[p] - i);
-                swap(S[i], S[pos[p]]);
+                std::swap(S[i], S[pos[p]]);
                 p++;
                 count = 1;
             }
@@ -34,7 +34,11 @@ public:
 
 int main() {
     Solution sol;
-    string s = "[]][][";
-    cout << "Min swaps for bracket balancing: " << sol.minimumNumberOfSwaps(s) << endl;
+    assert(sol.minimumNumberOfSwaps("[]][][") == 2);
+    assert(sol.minimumNumberOfSwaps("[[][]]") == 0);
+    assert(sol.minimumNumberOfSwaps("][][") == 2);
+    assert(sol.minimumNumberOfSwaps("[]") == 0);
+
+    std::cout << "29_Minimum_swaps_bracket_balancing tests passed.\n";
     return 0;
 }

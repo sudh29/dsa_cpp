@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -19,5 +20,7 @@ int alternatingMaxLength(const std::vector<int>& arr) {
 int main() {
     std::vector<int> arr = {1, 5, 4};
     std::cout << "Max alternating subsequence length: " << alternatingMaxLength(arr) << " (expected 3)\n";
+    assert(alternatingMaxLength(arr) == 3);
+
     return 0;
 }

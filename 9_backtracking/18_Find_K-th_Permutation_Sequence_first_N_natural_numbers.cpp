@@ -1,6 +1,7 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 
 std::string kthPermutation(int n, int k) {
     int fact = 1;
@@ -11,7 +12,7 @@ std::string kthPermutation(int n, int k) {
     }
     numbers.push_back(n);
 
-    std::string ans = "";
+    std::string ans;
     k = k - 1; // 0-based indexing
 
     while (true) {
@@ -19,13 +20,17 @@ std::string kthPermutation(int n, int k) {
         numbers.erase(numbers.begin() + (k / fact));
         if (numbers.empty()) break;
         k = k % fact;
-        fact = fact / numbers.size();
+        fact = fact / static_cast<int>(numbers.size());
     }
     return ans;
 }
 
 int main() {
-    std::cout << "3rd permutation of N=3: " << kthPermutation(3, 3) << " (expected 213)\n";
-    std::cout << "4th permutation of N=4: " << kthPermutation(4, 4) << " (expected 1342)\n";
+    assert(kthPermutation(3, 3) == "213");
+    assert(kthPermutation(4, 4) == "1342");
+    assert(kthPermutation(1, 1) == "1");
+    assert(kthPermutation(3, 1) == "123");
+
+    std::cout << "18_Find_K-th_Permutation_Sequence_first_N_natural_numbers tests passed.\n";
     return 0;
 }

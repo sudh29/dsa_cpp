@@ -1,13 +1,19 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
+
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
 
 class Solution {
 public:
@@ -31,7 +37,14 @@ int main() {
     root->left->right = new Node(5);
 
     Solution sol;
-    Node* ans = sol.lca(root, 4, 5);
-    cout << "LCA of 4 and 5 in Binary Tree: " << (ans ? ans->data : -1) << endl; // 2
+    Node* ans1 = sol.lca(root, 4, 5);
+    assert(ans1 != nullptr && ans1->data == 2);
+
+    Node* ans2 = sol.lca(root, 4, 3);
+    assert(ans2 != nullptr && ans2->data == 1);
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 30_Find_LCA_Binary_tree: All tests passed.\n";
     return 0;
 }

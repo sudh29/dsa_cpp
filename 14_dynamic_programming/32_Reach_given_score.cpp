@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -17,5 +18,8 @@ long long countWays(int n) {
 int main() {
     std::cout << "Ways to reach 20: " << countWays(20) << " (expected 4)\n";
     std::cout << "Ways to reach 13: " << countWays(13) << " (expected 2)\n";
+    assert(countWays(20) == 4);
+    assert(countWays(13) == 2);
+
     return 0;
 }

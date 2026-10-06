@@ -1,8 +1,9 @@
+#include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <string>
-#include <vector>
-#include <algorithm>
 #include <unordered_set>
+#include <vector>
 
 void permute(std::string& s, size_t index, std::vector<std::string>& res) {
     if (index == s.length() - 1) {
@@ -30,10 +31,14 @@ std::vector<std::string> findPermutation(std::string S) {
 }
 
 int main() {
-    std::string s = "ABC";
-    auto perms = findPermutation(s);
-    std::cout << "Permutations of 'ABC': ";
-    for (const auto& p : perms) std::cout << p << " ";
-    std::cout << "\n";
+    auto perms = findPermutation("ABC");
+    assert(perms.size() == 6);
+    assert(perms.front() == "ABC");
+    assert(perms.back() == "CBA");
+
+    assert(findPermutation("A").size() == 1);
+    assert(findPermutation("AB").size() == 2);
+
+    std::cout << "13_Print_all_permutations_string tests passed.\n";
     return 0;
 }

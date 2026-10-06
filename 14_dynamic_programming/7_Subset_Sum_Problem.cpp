@@ -1,6 +1,7 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <numeric>
+#include <vector>
 
 bool equalPartition(int N, const std::vector<int>& arr) {
     (void)N;
@@ -21,7 +22,15 @@ bool equalPartition(int N, const std::vector<int>& arr) {
 }
 
 int main() {
-    std::vector<int> arr = {1, 5, 11, 5};
-    std::cout << "Can partition {1, 5, 11, 5}: " << (equalPartition(arr.size(), arr) ? "YES" : "NO") << "\n";
+    std::vector<int> arr1 = {1, 5, 11, 5};
+    assert(equalPartition(arr1.size(), arr1) == true);
+
+    std::vector<int> arr2 = {1, 3, 5};
+    assert(equalPartition(arr2.size(), arr2) == false);
+
+    std::vector<int> arr3 = {2, 2};
+    assert(equalPartition(arr3.size(), arr3) == true);
+
+    std::cout << "7_Subset_Sum_Problem tests passed.\n";
     return 0;
 }

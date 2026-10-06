@@ -1,34 +1,40 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
-void inorder(Node* root, vector<int> &nodes) {
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
+void inorder(const Node* root, std::vector<int> &nodes) {
     if (!root) return;
     inorder(root->left, nodes);
     nodes.push_back(root->data);
     inorder(root->right, nodes);
 }
 
-void BSTToMinHeap(Node* root, const vector<int> &nodes, int &idx) {
+void BSTToMinHeap(Node* root, const std::vector<int> &nodes, size_t &idx) {
     if (!root) return;
     root->data = nodes[idx++];
     BSTToMinHeap(root->left, nodes, idx);
     BSTToMinHeap(root->right, nodes, idx);
 }
 
-void preorder(Node* root) {
+void getPreorder(const Node* root, std::vector<int> &res) {
     if (!root) return;
-    cout << root->data << " ";
-    preorder(root->left);
-    preorder(root->right);
+    res.push_back(root->data);
+    getPreorder(root->left, res);
+    getPreorder(root->right, res);
 }
 
 int main() {
@@ -38,13 +44,22 @@ int main() {
     root->left->left = new Node(1);
     root->left->right = new Node(3);
 
-    vector<int> nodes;
+    std::vector<int> nodes;
     inorder(root, nodes);
-    int idx = 0;
+    size_t idx = 0;
     BSTToMinHeap(root, nodes, idx);
 
-    cout << "BST converted to Min Heap (Preorder): ";
-    preorder(root);
-    cout << endl;
+    std::vector<int> preorderRes;
+    getPreorder(root, preorderRes);
+
+    // BST inorder was 1, 2, 3, 4, 6
+    // Min heap filled in preorder with sorted elements:
+    // root = 1, left = 2, right = 4, left->left = 3, left->right = 6
+    std::vector<int> expected = {1, 2, 3, 4, 6};
+    assert(preorderRes == expected);
+
+    freeTree(root);
+
+    std::cout << "11_heap 14_Convert_BST_to_Min_Max_Heap: All tests passed.\n";
     return 0;
 }

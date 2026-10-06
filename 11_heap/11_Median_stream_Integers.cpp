@@ -1,13 +1,13 @@
+#include <cassert>
+#include <cmath>
 #include <iostream>
-#include <vector>
 #include <queue>
-
-using namespace std;
+#include <vector>
 
 class MedianFinder {
 private:
-    priority_queue<int> maxH; // lower half
-    priority_queue<int, vector<int>, greater<int>> minH; // upper half
+    std::priority_queue<int> maxH; // lower half
+    std::priority_queue<int, std::vector<int>, std::greater<int>> minH; // upper half
 
 public:
     void insert(int x) {
@@ -17,7 +17,7 @@ public:
             minH.push(x);
         }
 
-        // Balance heaps
+        // Balance heaps: maxH can have at most 1 more element than minH
         if (maxH.size() > minH.size() + 1) {
             minH.push(maxH.top());
             maxH.pop();
@@ -27,20 +27,30 @@ public:
         }
     }
 
-    double getMedian() {
+    double getMedian() const {
+        if (maxH.empty() && minH.empty()) return 0.0;
         if (maxH.size() == minH.size()) {
             return (maxH.top() + minH.top()) / 2.0;
         }
-        return maxH.top();
+        return static_cast<double>(maxH.top());
     }
 };
 
 int main() {
     MedianFinder mf;
-    vector<int> stream = {5, 15, 1, 3};
-    for (int x : stream) {
-        mf.insert(x);
-        cout << "Added " << x << " -> Median: " << mf.getMedian() << endl;
+    std::vector<int> stream = {5, 15, 1, 3};
+    // Stream additions:
+    // 5 -> median: 5.0
+    // 15 -> median: (5 + 15) / 2 = 10.0
+    // 1 -> median: 5.0
+    // 3 -> median: (3 + 5) / 2 = 4.0
+    std::vector<double> expected = {5.0, 10.0, 5.0, 4.0};
+
+    for (size_t i = 0; i < stream.size(); ++i) {
+        mf.insert(stream[i]);
+        assert(std::abs(mf.getMedian() - expected[i]) < 1e-6);
     }
+
+    std::cout << "11_heap 11_Median_stream_Integers: All tests passed.\n";
     return 0;
 }

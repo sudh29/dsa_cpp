@@ -1,14 +1,16 @@
-#include <iostream>
-#include <vector>
 #include <algorithm>
-
-using namespace std;
+#include <cassert>
+#include <iostream>
+#include <span>
+#include <vector>
 
 class Solution {
 public:
-    int find_median(vector<int> v) {
-        sort(v.begin(), v.end());
-        int n = v.size();
+    int findMedian(std::span<const int> arr) {
+        assert(!arr.empty());
+        std::vector<int> v(arr.begin(), arr.end());
+        std::sort(v.begin(), v.end());
+        size_t n = v.size();
         if (n % 2 != 0) return v[n / 2];
         return (v[n / 2 - 1] + v[n / 2]) / 2;
     }
@@ -16,7 +18,12 @@ public:
 
 int main() {
     Solution sol;
-    vector<int> v = {90, 100, 78, 89, 67};
-    cout << "Median of array: " << sol.find_median(v) << endl;
+    std::vector<int> v1 = {90, 100, 78, 89, 67};
+    assert(sol.findMedian(v1) == 89);
+
+    std::vector<int> v2 = {56, 67, 30, 79};
+    assert(sol.findMedian(v2) == 61);
+
+    std::cout << "1_array 34_Find_the_median: All tests passed.\n";
     return 0;
 }

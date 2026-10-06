@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -16,5 +17,7 @@ long long maxSubArraySum(const std::vector<int>& arr) {
 int main() {
     std::vector<int> arr = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
     std::cout << "Max contiguous subarray sum: " << maxSubArraySum(arr) << " (expected 6)\n";
+    assert(maxSubArraySum(arr) == 6);
+
     return 0;
 }

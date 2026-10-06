@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -32,5 +33,8 @@ int eggDrop(int N, int K) {
 int main() {
     std::cout << "Egg drop N=2, K=10: " << eggDrop(2, 10) << " (expected 4)\n";
     std::cout << "Egg drop N=1, K=2: " << eggDrop(1, 2) << " (expected 2)\n";
+    assert(eggDrop(2, 10) == 4);
+    assert(eggDrop(1, 2) == 2);
+
     return 0;
 }

@@ -1,6 +1,7 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <queue>
+#include <vector>
 
 class GraphAdjMatrix {
 private:
@@ -19,6 +20,7 @@ public:
 
     std::vector<int> bfs(int source) {
         std::vector<int> path;
+        if (size <= 0 || source < 0 || source >= size) return path;
         std::vector<bool> visited(size, false);
         std::queue<int> q;
 
@@ -58,12 +60,12 @@ int main() {
     g.addEdge(1, 4);
     g.addEdge(1, 5);
 
-    std::cout << "Adjacency Matrix:\n";
-    g.printMatrix();
-
-    std::cout << "\nBFS from 0: ";
     auto traversal = g.bfs(0);
-    for (int node : traversal) std::cout << node << " ";
-    std::cout << "\n";
+    std::vector<int> expected = {0, 1, 2, 3, 4, 5};
+    assert(traversal == expected);
+
+    assert(g.bfs(-1).empty());
+
+    std::cout << "graph_adj_matrix_bfs tests passed.\n";
     return 0;
 }

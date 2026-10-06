@@ -1,8 +1,9 @@
-#include <iostream>
-#include <vector>
 #include <algorithm>
-#include <numeric>
+#include <cassert>
 #include <cmath>
+#include <iostream>
+#include <numeric>
+#include <vector>
 
 long long maximizeSum(std::vector<long long>& a, int n, int k) {
     std::sort(a.begin(), a.end());
@@ -16,7 +17,6 @@ long long maximizeSum(std::vector<long long>& a, int n, int k) {
         }
     }
     if (k > 0 && k % 2 == 1) {
-        // Find element with minimum absolute value
         int min_idx = 0;
         for (int j = 1; j < n; ++j) {
             if (std::abs(a[j]) < std::abs(a[min_idx])) {
@@ -33,11 +33,12 @@ long long maximizeSum(std::vector<long long>& a, int n, int k) {
 int main() {
     std::vector<long long> arr1 = {-2, -3, 4, 1};
     int k1 = 2;
-    std::cout << "Max sum after k=2: " << maximizeSum(arr1, arr1.size(), k1) << " (expected 10)\n";
+    assert(maximizeSum(arr1, static_cast<int>(arr1.size()), k1) == 10);
 
     std::vector<long long> arr2 = {5, -2, 5, -4, 5, -12, 5, 5, 5, 20};
     int k2 = 5;
-    std::cout << "Max sum after k=5: " << maximizeSum(arr2, arr2.size(), k2) << " (expected 68)\n";
+    assert(maximizeSum(arr2, static_cast<int>(arr2.size()), k2) == 68);
 
+    std::cout << "15_Maximize_array_sum_after_K_negations tests passed.\n";
     return 0;
 }

@@ -1,11 +1,11 @@
+#include <cassert>
 #include <iostream>
 #include <string>
+#include <string_view>
 #include <vector>
 
-using namespace std;
-
-void generateSubsequences(const string &str, int idx, string current, vector<string> &res) {
-    if (idx == (int)str.length()) {
+void generateSubsequences(std::string_view str, size_t idx, std::string current, std::vector<std::string> &res) {
+    if (idx == str.length()) {
         if (!current.empty()) res.push_back(current);
         return;
     }
@@ -16,11 +16,13 @@ void generateSubsequences(const string &str, int idx, string current, vector<str
 }
 
 int main() {
-    string s = "abc";
-    vector<string> res;
+    std::string_view s = "abc";
+    std::vector<std::string> res;
     generateSubsequences(s, 0, "", res);
-    cout << "Subsequences of '" << s << "': ";
-    for (const string &sub : res) cout << sub << " ";
-    cout << endl;
+
+    // 2^3 - 1 = 7 non-empty subsequences
+    assert(res.size() == 7);
+
+    std::cout << "3_string 9_Print_all_Subsequences_string: All tests passed.\n";
     return 0;
 }

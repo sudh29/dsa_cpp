@@ -1,6 +1,7 @@
+#include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 struct Edge {
     int u, v, weight;
@@ -37,6 +38,7 @@ public:
 };
 
 int kruskalMST(int V, std::vector<Edge>& edges) {
+    if (V <= 1) return 0;
     std::sort(edges.begin(), edges.end());
     DSU dsu(V);
     int mst_weight = 0;
@@ -62,6 +64,11 @@ int main() {
         {2, 3, 4}
     };
 
-    std::cout << "Kruskal's MST weight: " << kruskalMST(V, edges) << " (expected 19)\n";
+    assert(kruskalMST(V, edges) == 19);
+
+    std::vector<Edge> empty;
+    assert(kruskalMST(0, empty) == 0);
+
+    std::cout << "18_Implement_Kruskals_Algorithm tests passed.\n";
     return 0;
 }

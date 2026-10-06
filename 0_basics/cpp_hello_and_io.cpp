@@ -1,17 +1,25 @@
+#include <cassert>
 #include <iostream>
-#include <string>
 #include <sstream>
+#include <string>
+
+/**
+ * Topic: Modern C++ Hello & I/O Streams
+ * Module: 0_basics
+ */
 
 int main() {
-    std::cout << "=== Modern C++ Hello & I/O Streams ===" << std::endl;
     std::string greeting = "Hello from DSA C++!";
-    std::cout << greeting << std::endl;
+    assert(!greeting.empty());
+    assert(greeting.length() == 19);
 
-    // String Streams
     std::stringstream ss;
     int year = 2026;
     ss << "Year: " << year << " | Status: Ready";
     std::string formatted = ss.str();
-    std::cout << formatted << std::endl;
+
+    assert(formatted == "Year: 2026 | Status: Ready");
+
+    std::cout << "[PASS] 0_basics/cpp_hello_and_io: all tests passed!\n";
     return 0;
 }

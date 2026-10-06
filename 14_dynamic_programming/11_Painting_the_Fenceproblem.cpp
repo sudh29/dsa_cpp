@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -20,5 +21,8 @@ long long countWays(int n, int k) {
 int main() {
     std::cout << "Fence ways n=3, k=2: " << countWays(3, 2) << " (expected 6)\n";
     std::cout << "Fence ways n=2, k=4: " << countWays(2, 4) << " (expected 16)\n";
+    assert(countWays(3, 2) == 6);
+    assert(countWays(2, 4) == 16);
+
     return 0;
 }

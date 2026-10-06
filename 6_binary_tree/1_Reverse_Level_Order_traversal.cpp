@@ -1,31 +1,38 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <queue>
 #include <stack>
-
-using namespace std;
+#include <vector>
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
-vector<int> reverseLevelOrder(Node *root) {
-    vector<int> res;
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
+std::vector<int> reverseLevelOrder(const Node *root) {
+    std::vector<int> res;
     if (!root) return res;
-    queue<Node*> q;
-    stack<int> s;
+    std::queue<const Node*> q;
+    std::stack<int> s;
     q.push(root);
 
     while (!q.empty()) {
-        Node* cur = q.front();
+        const Node* cur = q.front();
         q.pop();
         s.push(cur->data);
         if (cur->right) q.push(cur->right);
         if (cur->left) q.push(cur->left);
     }
+    res.reserve(s.size());
     while (!s.empty()) {
         res.push_back(s.top());
         s.pop();
@@ -41,8 +48,13 @@ int main() {
     root->left->right = new Node(5);
 
     auto res = reverseLevelOrder(root);
-    cout << "Reverse level order: ";
-    for (int v : res) cout << v << " ";
-    cout << endl;
+    std::vector<int> expected = {4, 5, 2, 3, 1};
+    assert(res == expected);
+
+    assert(reverseLevelOrder(nullptr).empty());
+
+    freeTree(root);
+
+    std::cout << "6_binary_tree 1_Reverse_Level_Order_traversal: All tests passed.\n";
     return 0;
 }

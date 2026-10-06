@@ -1,10 +1,11 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
+#include <queue>
+#include <stack>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <queue>
-#include <stack>
+#include <vector>
 
 class IterativeGraph {
 private:
@@ -16,18 +17,18 @@ public:
         adj[v].push_back(u);
     }
 
-    void bfs(const std::string& start) {
+    std::vector<std::string> bfs(const std::string& start) {
+        std::vector<std::string> res;
         std::unordered_set<std::string> visited;
         std::queue<std::string> q;
 
         visited.insert(start);
         q.push(start);
 
-        std::cout << "Iterative BFS: ";
         while (!q.empty()) {
             std::string curr = q.front();
             q.pop();
-            std::cout << curr << " ";
+            res.push_back(curr);
 
             for (const auto& neighbor : adj[curr]) {
                 if (visited.find(neighbor) == visited.end()) {
@@ -36,23 +37,23 @@ public:
                 }
             }
         }
-        std::cout << "\n";
+        return res;
     }
 
-    void dfs(const std::string& start) {
+    std::vector<std::string> dfs(const std::string& start) {
+        std::vector<std::string> res;
         std::unordered_set<std::string> visited;
         std::stack<std::string> s;
 
         s.push(start);
 
-        std::cout << "Iterative DFS: ";
         while (!s.empty()) {
             std::string curr = s.top();
             s.pop();
 
             if (visited.find(curr) == visited.end()) {
                 visited.insert(curr);
-                std::cout << curr << " ";
+                res.push_back(curr);
 
                 // push neighbors in reverse order to explore first neighbor first
                 for (auto it = adj[curr].rbegin(); it != adj[curr].rend(); ++it) {
@@ -62,7 +63,7 @@ public:
                 }
             }
         }
-        std::cout << "\n";
+        return res;
     }
 };
 
@@ -75,7 +76,14 @@ int main() {
     g.addEdge("2", "4");
     g.addEdge("3", "4");
 
-    g.bfs("0");
-    g.dfs("0");
+    auto b = g.bfs("0");
+    assert(b.size() == 5);
+    assert(b[0] == "0");
+
+    auto d = g.dfs("0");
+    assert(d.size() == 5);
+    assert(d[0] == "0");
+
+    std::cout << "graph_iterative_bfs_dfs tests passed.\n";
     return 0;
 }

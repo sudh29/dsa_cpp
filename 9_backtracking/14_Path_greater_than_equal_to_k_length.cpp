@@ -1,5 +1,6 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
+#include <utility>
 #include <vector>
 
 bool dfs(int u, std::vector<bool>& visited, const std::vector<std::vector<std::pair<int, int>>>& adj,
@@ -33,7 +34,6 @@ bool pathMoreThanK(int V, int K, const std::vector<std::vector<int>>& edges) {
 
 int main() {
     int V = 9;
-    int K = 60;
     std::vector<std::vector<int>> edges = {
         {0, 1, 4}, {0, 7, 8}, {1, 2, 8}, {1, 7, 11},
         {2, 3, 7}, {2, 8, 2}, {2, 5, 4}, {3, 4, 9},
@@ -41,7 +41,10 @@ int main() {
         {6, 8, 6}, {7, 8, 7}
     };
 
-    std::cout << "Path of weight >= " << K << " exists from 0: "
-              << (pathMoreThanK(V, K, edges) ? "YES (1)" : "NO (0)") << "\n";
+    assert(pathMoreThanK(V, 60, edges) == true);
+    assert(pathMoreThanK(V, 100, edges) == false);
+    assert(pathMoreThanK(V, 0, edges) == true);
+
+    std::cout << "14_Path_greater_than_equal_to_k_length tests passed.\n";
     return 0;
 }

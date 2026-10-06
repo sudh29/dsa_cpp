@@ -1,8 +1,9 @@
+#include <cassert>
 #include <iostream>
-#include <string>
-#include <vector>
 #include <queue>
+#include <string>
 #include <unordered_set>
+#include <vector>
 
 bool isValidString(const std::string& str) {
     int cnt = 0;
@@ -53,9 +54,17 @@ std::vector<std::string> removeInvalidParentheses(const std::string& str) {
 int main() {
     std::string s = "()())()";
     auto valid = removeInvalidParentheses(s);
-    std::cout << "Valid expressions for '" << s << "':\n";
+    assert(!valid.empty());
     for (const auto& v : valid) {
-        std::cout << "  " << v << "\n";
+        assert(isValidString(v));
     }
+
+    auto v2 = removeInvalidParentheses("()");
+    assert(v2.size() == 1 && v2[0] == "()");
+
+    auto v3 = removeInvalidParentheses(")(");
+    assert(v3.size() == 1 && v3[0] == "");
+
+    std::cout << "3_Remove_Invalid_Parentheses tests passed.\n";
     return 0;
 }

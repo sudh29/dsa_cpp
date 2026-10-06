@@ -1,29 +1,35 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 class Solution {
-public:
-    int countNodes(Node* root) {
+private:
+    int countNodes(const Node* root) {
         if (!root) return 0;
         return 1 + countNodes(root->left) + countNodes(root->right);
     }
 
-    bool isComplete(Node* root, int index, int totalNodes) {
+    bool isComplete(const Node* root, int index, int totalNodes) {
         if (!root) return true;
         if (index >= totalNodes) return false;
         return isComplete(root->left, 2 * index + 1, totalNodes) &&
                isComplete(root->right, 2 * index + 2, totalNodes);
     }
 
-    bool isHeapProperty(Node* root) {
+    bool isHeapProperty(const Node* root) {
         if (!root->left && !root->right) return true;
         if (!root->right) {
             return root->data >= root->left->data;
@@ -34,7 +40,8 @@ public:
         return false;
     }
 
-    bool isHeap(Node* root) {
+public:
+    bool isHeap(const Node* root) {
         if (!root) return true;
         int total = countNodes(root);
         return isComplete(root, 0, total) && isHeapProperty(root);
@@ -49,6 +56,14 @@ int main() {
     root->left->right = new Node(6);
 
     Solution sol;
-    cout << "Is tree a valid max-heap: " << (sol.isHeap(root) ? "Yes" : "No") << endl;
+    assert(sol.isHeap(root));
+
+    // Violate heap property
+    root->left->right->data = 15;
+    assert(!sol.isHeap(root));
+
+    freeTree(root);
+
+    std::cout << "11_heap 12_Is_Binary_Tree_Heap: All tests passed.\n";
     return 0;
 }

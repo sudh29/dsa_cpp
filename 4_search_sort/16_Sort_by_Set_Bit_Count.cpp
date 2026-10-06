@@ -1,26 +1,31 @@
-#include <iostream>
 #include <algorithm>
-
-using namespace std;
+#include <bit>
+#include <cassert>
+#include <iostream>
+#include <vector>
 
 class Solution {
 public:
     static bool comp(int a, int b) {
-        return __builtin_popcount(a) > __builtin_popcount(b);
+        return std::popcount(static_cast<unsigned int>(a)) > std::popcount(static_cast<unsigned int>(b));
     }
 
-    void sortBySetBitCount(int arr[], int n) {
-        stable_sort(arr, arr + n, comp);
+    void sortBySetBitCount(std::vector<int>& arr) {
+        std::stable_sort(arr.begin(), arr.end(), comp);
     }
 };
 
 int main() {
     Solution sol;
-    int arr[] = {5, 2, 3, 9, 4, 6, 7, 15, 32};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    sol.sortBySetBitCount(arr, n);
-    cout << "Sorted by set bit count: ";
-    for (int i = 0; i < n; i++) cout << arr[i] << " ";
-    cout << endl;
+    std::vector<int> arr = {5, 2, 3, 9, 4, 6, 7, 15, 32};
+    sol.sortBySetBitCount(arr);
+    std::vector<int> expected = {15, 7, 5, 3, 9, 6, 2, 4, 32};
+    assert(arr == expected);
+
+    std::vector<int> empty;
+    sol.sortBySetBitCount(empty);
+    assert(empty.empty());
+
+    std::cout << "16_Sort_by_Set_Bit_Count tests passed.\n";
     return 0;
 }

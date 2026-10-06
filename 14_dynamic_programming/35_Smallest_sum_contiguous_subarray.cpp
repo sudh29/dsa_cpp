@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -16,5 +17,7 @@ int smallestSumSubarray(const std::vector<int>& arr, int n) {
 int main() {
     std::vector<int> arr = {3, -4, 2, -3, -1, 7, -5};
     std::cout << "Smallest contiguous subarray sum: " << smallestSumSubarray(arr, arr.size()) << " (expected -6)\n";
+    assert(smallestSumSubarray(arr, arr.size()) == -6);
+
     return 0;
 }

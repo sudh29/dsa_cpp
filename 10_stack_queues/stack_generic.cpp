@@ -1,7 +1,8 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 template <typename T>
 class GenericStack {
@@ -18,20 +19,37 @@ public:
         if (elements.empty()) throw std::out_of_range("Stack<>::top(): empty stack");
         return elements.back();
     }
-    bool empty() const { return elements.empty(); }
-    size_t size() const { return elements.size(); }
+    [[nodiscard]] bool empty() const { return elements.empty(); }
+    [[nodiscard]] size_t size() const { return elements.size(); }
 };
 
 int main() {
     GenericStack<std::string> strStack;
+    assert(strStack.empty());
+    assert(strStack.size() == 0);
+
     strStack.push("Hello");
     strStack.push("Modern");
     strStack.push("C++");
+    assert(strStack.size() == 3);
+    assert(!strStack.empty());
+    assert(strStack.top() == "C++");
 
-    while (!strStack.empty()) {
-        std::cout << strStack.top() << " ";
+    strStack.pop();
+    assert(strStack.top() == "Modern");
+    strStack.pop();
+    assert(strStack.top() == "Hello");
+    strStack.pop();
+    assert(strStack.empty());
+
+    bool caught = false;
+    try {
         strStack.pop();
+    } catch (const std::out_of_range &) {
+        caught = true;
     }
-    std::cout << std::endl;
+    assert(caught);
+
+    std::cout << "10_stack_queues stack_generic: All tests passed.\n";
     return 0;
 }

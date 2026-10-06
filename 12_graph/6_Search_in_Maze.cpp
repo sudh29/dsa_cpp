@@ -1,7 +1,8 @@
-#include <iostream>
-#include <vector>
-#include <string>
 #include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <string>
+#include <vector>
 
 void dfs(const std::vector<std::vector<int>>& m, int n, std::vector<std::string>& paths,
          std::string curr, int r, int c, std::vector<std::vector<bool>>& visited) {
@@ -23,7 +24,7 @@ void dfs(const std::vector<std::vector<int>>& m, int n, std::vector<std::string>
 
 std::vector<std::string> findPath(const std::vector<std::vector<int>>& m, int n) {
     std::vector<std::string> res;
-    if (m[0][0] == 0 || m[n - 1][n - 1] == 0) return res;
+    if (m.empty() || m[0][0] == 0 || m[n - 1][n - 1] == 0) return res;
 
     std::vector<std::vector<bool>> visited(n, std::vector<bool>(n, false));
     dfs(m, n, res, "", 0, 0, visited);
@@ -40,8 +41,12 @@ int main() {
     };
 
     auto paths = findPath(m, 4);
-    std::cout << "Paths in maze: ";
-    for (const auto& p : paths) std::cout << p << " ";
-    std::cout << "\n";
+    std::vector<std::string> expected = {"DDRDRR", "DRDDRR"};
+    assert(paths == expected);
+
+    std::vector<std::vector<int>> blocked = {{0}};
+    assert(findPath(blocked, 1).empty());
+
+    std::cout << "6_Search_in_Maze tests passed.\n";
     return 0;
 }

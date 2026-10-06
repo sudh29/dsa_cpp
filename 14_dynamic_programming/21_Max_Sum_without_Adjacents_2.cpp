@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -22,5 +23,7 @@ int findMaxSum(const std::vector<int>& arr, int n) {
 int main() {
     std::vector<int> arr = {100, 1000, 100, 1000, 1};
     std::cout << "Max sum without 3 adjacent: " << findMaxSum(arr, arr.size()) << " (expected 2101)\n";
+    assert(findMaxSum(arr, arr.size()) == 2101);
+
     return 0;
 }

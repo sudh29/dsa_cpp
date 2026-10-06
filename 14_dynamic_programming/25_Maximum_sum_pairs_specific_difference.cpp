@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -21,5 +22,7 @@ int main() {
     int K = 4;
     std::cout << "Max sum pair diff < " << K << ": "
               << maxSumPairWithDifferenceLessThanK(arr, arr.size(), K) << " (expected 62)\n";
+    assert(maxSumPairWithDifferenceLessThanK(arr, arr.size(), K) == 62);
+
     return 0;
 }

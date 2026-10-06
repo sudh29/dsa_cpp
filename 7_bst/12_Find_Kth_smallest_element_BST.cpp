@@ -1,17 +1,23 @@
+#include <cassert>
 #include <iostream>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 class Solution {
-public:
-    void inorder(Node* root, int &k, int &ans) {
+private:
+    void inorder(const Node* root, int &k, int &ans) {
         if (!root || k <= 0) return;
         inorder(root->left, k, ans);
         k--;
@@ -22,7 +28,8 @@ public:
         inorder(root->right, k, ans);
     }
 
-    int KthSmallestElement(Node *root, int K) {
+public:
+    int KthSmallestElement(const Node *root, int K) {
         int ans = -1;
         inorder(root, K, ans);
         return ans;
@@ -36,6 +43,13 @@ int main() {
     root->left->left = new Node(1);
 
     Solution sol;
-    cout << "2nd smallest element: " << sol.KthSmallestElement(root, 2) << endl;
+    assert(sol.KthSmallestElement(root, 1) == 1);
+    assert(sol.KthSmallestElement(root, 2) == 2);
+    assert(sol.KthSmallestElement(root, 3) == 4);
+    assert(sol.KthSmallestElement(root, 4) == 9);
+
+    freeTree(root);
+
+    std::cout << "7_bst 12_Find_Kth_smallest_element_BST: All tests passed.\n";
     return 0;
 }

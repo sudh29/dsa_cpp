@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -32,8 +33,11 @@ int main() {
     adj[4] = {0, 3};
 
     auto dfs = dfsOfGraph(V, adj);
-    std::cout << "DFS Traversal: ";
-    for (int node : dfs) std::cout << node << " ";
-    std::cout << "\n";
+    std::vector<int> expected = {0, 1, 2, 4, 3};
+    assert(dfs == expected);
+
+    assert(dfsOfGraph(0, {}).empty());
+
+    std::cout << "3_Implement_DFS_Algo tests passed.\n";
     return 0;
 }

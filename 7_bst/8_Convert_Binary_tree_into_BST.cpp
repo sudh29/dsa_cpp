@@ -1,47 +1,54 @@
+#include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <vector>
-#include <algorithm>
-
-using namespace std;
 
 struct Node {
     int data;
     Node* left;
     Node* right;
-    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 class Solution {
-public:
-    void inorderExtract(Node* root, vector<int> &nodes) {
+private:
+    void inorderExtract(const Node* root, std::vector<int> &nodes) {
         if (!root) return;
         inorderExtract(root->left, nodes);
         nodes.push_back(root->data);
         inorderExtract(root->right, nodes);
     }
 
-    void inorderFill(Node* root, const vector<int> &nodes, int &idx) {
+    void inorderFill(Node* root, const std::vector<int> &nodes, size_t &idx) {
         if (!root) return;
         inorderFill(root->left, nodes, idx);
         root->data = nodes[idx++];
         inorderFill(root->right, nodes, idx);
     }
 
-    Node *binaryTreeToBST(Node *root) {
-        vector<int> nodes;
+public:
+    Node* binaryTreeToBST(Node* root) {
+        std::vector<int> nodes;
         inorderExtract(root, nodes);
-        sort(nodes.begin(), nodes.end());
-        int idx = 0;
+        std::sort(nodes.begin(), nodes.end());
+        size_t idx = 0;
         inorderFill(root, nodes, idx);
         return root;
     }
 };
 
-void inorderPrint(Node* root) {
+void getInorder(const Node* root, std::vector<int> &res) {
     if (!root) return;
-    inorderPrint(root->left);
-    cout << root->data << " ";
-    inorderPrint(root->right);
+    getInorder(root->left, res);
+    res.push_back(root->data);
+    getInorder(root->right, res);
 }
 
 int main() {
@@ -51,8 +58,14 @@ int main() {
 
     Solution sol;
     sol.binaryTreeToBST(root);
-    cout << "Inorder of converted BST: ";
-    inorderPrint(root);
-    cout << endl;
+
+    std::vector<int> in;
+    getInorder(root, in);
+    std::vector<int> expected = {1, 2, 3};
+    assert(in == expected);
+
+    freeTree(root);
+
+    std::cout << "7_bst 8_Convert_Binary_tree_into_BST: All tests passed.\n";
     return 0;
 }

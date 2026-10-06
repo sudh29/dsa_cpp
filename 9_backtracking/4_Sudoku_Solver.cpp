@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -46,16 +47,18 @@ int main() {
         {0, 0, 5, 2, 0, 6, 3, 0, 0}
     };
 
-    if (solveSudoku(grid)) {
-        std::cout << "Sudoku solved successfully:\n";
-        for (int i = 0; i < 9; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                std::cout << grid[i][j] << " ";
-            }
-            std::cout << "\n";
+    assert(solveSudoku(grid) == true);
+    for (int i = 0; i < 9; ++i) {
+        int row_sum = 0, col_sum = 0;
+        for (int j = 0; j < 9; ++j) {
+            assert(grid[i][j] >= 1 && grid[i][j] <= 9);
+            row_sum += grid[i][j];
+            col_sum += grid[j][i];
         }
-    } else {
-        std::cout << "No solution exists\n";
+        assert(row_sum == 45);
+        assert(col_sum == 45);
     }
+
+    std::cout << "4_Sudoku_Solver tests passed.\n";
     return 0;
 }

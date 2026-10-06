@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -22,5 +23,7 @@ long long optimalStrategyOfGame(int n, const std::vector<int>& arr) {
 int main() {
     std::vector<int> arr = {5, 3, 7, 10};
     std::cout << "Optimal game score: " << optimalStrategyOfGame(arr.size(), arr) << " (expected 15)\n";
+    assert(optimalStrategyOfGame(arr.size(), arr) == 15);
+
     return 0;
 }

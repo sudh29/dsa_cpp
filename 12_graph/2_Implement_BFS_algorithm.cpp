@@ -1,6 +1,7 @@
+#include <cassert>
 #include <iostream>
-#include <vector>
 #include <queue>
+#include <vector>
 
 std::vector<int> bfsOfGraph(int V, const std::vector<std::vector<int>>& adj) {
     std::vector<int> res;
@@ -34,8 +35,11 @@ int main() {
     adj[2] = {4};
 
     auto bfs = bfsOfGraph(V, adj);
-    std::cout << "BFS Traversal: ";
-    for (int node : bfs) std::cout << node << " ";
-    std::cout << "\n";
+    std::vector<int> expected = {0, 1, 2, 3, 4};
+    assert(bfs == expected);
+
+    assert(bfsOfGraph(0, {}).empty());
+
+    std::cout << "2_Implement_BFS_algorithm tests passed.\n";
     return 0;
 }

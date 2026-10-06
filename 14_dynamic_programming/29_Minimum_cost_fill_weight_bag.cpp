@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <climits>
@@ -23,5 +24,7 @@ int main() {
     std::vector<int> cost = {20, 10, 4, 50, 100};
     int w = 5;
     std::cout << "Minimum cost to fill bag: " << minimumCost(cost.size(), w, cost) << " (expected 14)\n";
+    assert(minimumCost(cost.size(), w, cost) == 14);
+
     return 0;
 }
